@@ -1,8 +1,8 @@
 package com.twu.biblioteca;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 public class BibliotecaApp {
 
@@ -12,15 +12,18 @@ public class BibliotecaApp {
 
         System.out.println("\nPlease choose one of the following options:\n1 : for displaying a List of Books");
 
-        Scanner in = new Scanner(System.in);
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(System.in));
         try {
-            int a = in.nextInt();
-            if (a == 1) {
+            String input = reader.readLine();
+            if (input.equals("1")) {
                 System.out.println("\nList of all library books (Title, Author, Year):\n");
                 System.out.println(getListOfBooks());
             }
-        }catch (NoSuchElementException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
         }
     }
 

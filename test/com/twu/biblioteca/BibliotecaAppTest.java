@@ -11,7 +11,7 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
-public class ExampleTest {
+public class BibliotecaAppTest {
 
     //Streams for testing the command line outputs:
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -34,37 +34,38 @@ public class ExampleTest {
     @Test
     public void testOptionMenu() {
         //Given
-        String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
-        String optionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
 
         //When
         BibliotecaApp.main(new String[1]);
 
         //Then
-        assertEquals( welcomeMessage+optionMessage,
+        String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
+        String expectedOptionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
+        assertEquals( expectedWelcomeMessage+expectedOptionMessage,
                 outContent.toString());
     }
 
     @Test
     public void testOptionMenuListOfBooks() {
         //Given
-        String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
-        String optionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
-        String listTitle = "\nList of all library books (Title, Author, Year):\n\n";
-        String listOfBooks = BibliotecaApp.getListOfBooks();
 
         //When
         ByteArrayInputStream in;
         in = new ByteArrayInputStream("1".getBytes());
         System.setIn(in);
-
         BibliotecaApp.main(new String[1]);
 
         //Then
-        assertEquals( welcomeMessage+optionMessage+listTitle+listOfBooks+"\n",
+        String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
+        String expectedOptionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
+        String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
+        String expectedListOfBooks = BibliotecaApp.getListOfBooks();
+
+        assertEquals( expectedWelcomeMessage+expectedOptionMessage+expectedListTitle+expectedListOfBooks+"\n",
                 outContent.toString());
 
-        //reset System.in to its original:
+        //Teardown
         System.setIn(System.in);
     }
+
 }
