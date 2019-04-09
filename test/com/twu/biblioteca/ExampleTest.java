@@ -34,7 +34,7 @@ public class ExampleTest {
     public void testDisplayOfListOfBooks() {
         //Given
         String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-        String listTitle = "\nList of all library books:\n\n";
+        String listTitle = "\nList of all library books (Title, Author, Year):\n\n";
         String listOfBooks = BibliotecaApp.getListOfBooks();
         //When
         BibliotecaApp.main(new String[1]);
