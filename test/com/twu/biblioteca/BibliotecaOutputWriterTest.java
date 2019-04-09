@@ -4,13 +4,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
-public class BibliotecaAppTest {
+public class BibliotecaOutputWriterTest {
 
     //Streams for testing the command line outputs:
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -31,27 +30,29 @@ public class BibliotecaAppTest {
     }
 
     @Test
-    public void testOptionMenuListOfBooks() {
+    public void testSimpleWelcomeMessage() {
         //Given
 
         //When
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream("1".getBytes());
-        System.setIn(in);
-        BibliotecaApp.main(new String[1]);
+        BibliotecaOutputWriter.printWelcomeMessages(false);
+
+        //Then
+        String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
+        assertEquals( expectedWelcomeMessage,
+                outContent.toString());
+    }
+
+    @Test
+    public void testWelcomeMessageWithBookList() {
+        //Given
+
+        //When
+        BibliotecaOutputWriter.printWelcomeMessages(true);
 
         //Then
         String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
         String expectedOptionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
-        String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
-        BibliotecaLibrary library = new BibliotecaLibrary();
-        String expectedListOfBooks = library.getListOfBooks();
-
-        assertEquals( expectedWelcomeMessage+expectedOptionMessage+expectedListTitle+expectedListOfBooks+"\n",
+        assertEquals( expectedWelcomeMessage+expectedOptionMessage,
                 outContent.toString());
-
-        //Teardown
-        System.setIn(System.in);
     }
-
 }
