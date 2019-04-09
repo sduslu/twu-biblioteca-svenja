@@ -31,12 +31,15 @@ public class ExampleTest {
     }
 
     @Test
-    public void testWelcomeMessage() {
+    public void testDisplayOfListOfBooks() {
         //Given
+        String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
+        String listTitle = "\nList of all library books:\n\n";
+        String listOfBooks = BibliotecaApp.getListOfBooks();
         //When
         BibliotecaApp.main(new String[1]);
         //Then
-        assertEquals( "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n",
+        assertEquals( new String(welcomeMessage+listTitle+listOfBooks+"\n"),
                 outContent.toString());
     }
 }
