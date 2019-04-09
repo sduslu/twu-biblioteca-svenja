@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -31,15 +32,39 @@ public class ExampleTest {
     }
 
     @Test
-    public void testDisplayOfListOfBooks() {
+    public void testOptionMenu() {
         //Given
-        String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-        String listTitle = "\nList of all library books (Title, Author, Year):\n\n";
-        String listOfBooks = BibliotecaApp.getListOfBooks();
+        String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
+        String optionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
+
         //When
         BibliotecaApp.main(new String[1]);
+
         //Then
-        assertEquals( new String(welcomeMessage+listTitle+listOfBooks+"\n"),
+        assertEquals( welcomeMessage+optionMessage,
                 outContent.toString());
+    }
+
+    @Test
+    public void testOptionMenuListOfBooks() {
+        //Given
+        String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
+        String optionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
+        String listTitle = "\nList of all library books (Title, Author, Year):\n\n";
+        String listOfBooks = BibliotecaApp.getListOfBooks();
+
+        //When
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream("1".getBytes());
+        System.setIn(in);
+
+        BibliotecaApp.main(new String[1]);
+
+        //Then
+        assertEquals( welcomeMessage+optionMessage+listTitle+listOfBooks+"\n",
+                outContent.toString());
+
+        //reset System.in to its original:
+        System.setIn(System.in);
     }
 }
