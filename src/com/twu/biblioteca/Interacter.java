@@ -76,7 +76,7 @@ public class Interacter {
                 System.out.println("Thank you for returning the book");
             }
             else {
-                System.out.println("Sorry, that book is not available");
+                System.out.println("That is not a valid book to return.");
             }
             printOptionMessage();
         }

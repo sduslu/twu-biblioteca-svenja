@@ -219,10 +219,50 @@ public class InteracterTest {
         in = new ByteArrayInputStream(bookTitle.getBytes());
         System.setIn(in);
 
-        //When: Checking out a book successfully
+        //When: Returning a book successfully
         interacter.actOnChosenOption(3);
         //Then: I want to see a success message
         String expectedReturnMessage = "Thank you for returning the book\n\n";
+        assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
+        //Teardown
+        System.setIn(System.in);
+    }
+
+    @Test
+    public void testReturnUnSuccessMessageForeignBook() {
+        //Given: As a user
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        String bookTitle = "Three ???";
+        assert( !library.containsAvailable(bookTitle));
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream(bookTitle.getBytes());
+        System.setIn(in);
+
+        //When: Returning a book that does not belong to this library
+        interacter.actOnChosenOption(3);
+        //Then: I want to see a failure message
+        String expectedReturnMessage = "That is not a valid book to return.\n\n";
+        assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
+        //Teardown
+        System.setIn(System.in);
+    }
+
+    @Test
+    public void testReturnUnSuccessMessageAvailableBook() {
+        //Given: As a user
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        String bookTitle = "Alice in Wonderland";
+        assert( library.containsAvailable(bookTitle));
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream(bookTitle.getBytes());
+        System.setIn(in);
+
+        //When: Returning a book that is not checked out (still available)
+        interacter.actOnChosenOption(3);
+        //Then: I want to see a failure message
+        String expectedReturnMessage = "That is not a valid book to return.\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
         //Teardown
         System.setIn(System.in);
