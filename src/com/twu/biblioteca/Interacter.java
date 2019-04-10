@@ -22,7 +22,8 @@ public class Interacter {
     private static void printOptionMessage() {
         System.out.println("\nPlease choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
-                "\n1 : for displaying a List of Books");
+                "\n1 : for displaying a List of Books" +
+                "\n2 : for checking out a book");
     }
 
     public static int readInputOptionFromUser() {
@@ -34,6 +35,8 @@ public class Interacter {
                 return 1;
             } else if( input.equals("0") ) {
                 return 0;
+            } else if( input.equals("2")) {
+                return 2;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,7 +54,15 @@ public class Interacter {
         } else if( option == 0 ) {
             System.out.println("Exiting Biblioteca. See you soon!");
             return false;
-        } else if( option < 0 ) {
+        } else if( option == 2 ) {
+            System.out.println("Please specify which book you want to checkout (Title)");
+            String bookTitle = readInputBookFromUser();
+            if( this.library.containsAvailable(bookTitle)) {
+                this.library.checkout(bookTitle);
+            }
+            printOptionMessage();
+        }
+        else if( option < 0 ) {
             System.out.println("Please select a valid option!");
         }
         return true;
@@ -60,5 +71,20 @@ public class Interacter {
     public boolean processMenu() {
         int option = readInputOptionFromUser();
         return actOnChosenOption(option);
+    }
+
+    public static String readInputBookFromUser() {
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(System.in));
+
+        String input = "";
+        try {
+            input = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+        return input;
     }
 }

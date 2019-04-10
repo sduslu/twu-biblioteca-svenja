@@ -55,7 +55,8 @@ public class InteracterTest {
         String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
         String expectedOptionMessage = "Please choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
-                "\n1 : for displaying a List of Books\n";
+                "\n1 : for displaying a List of Books" +
+                "\n2 : for checking out a book\n";
         assertEquals( expectedWelcomeMessage+expectedOptionMessage,
                 outContent.toString());
     }
@@ -111,7 +112,8 @@ public class InteracterTest {
         String expectedListOfBooks = library.getListOfBooks();
         String expectedOptionMessage = "Please choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
-                "\n1 : for displaying a List of Books";
+                "\n1 : for displaying a List of Books" +
+                "\n2 : for checking out a book";
 
         interacter.actOnChosenOption(option);
         assertEquals( expectedListTitle+expectedListOfBooks+"\n"+"\n"+expectedOptionMessage+"\n",
@@ -145,6 +147,25 @@ public class InteracterTest {
 
         interacter.actOnChosenOption(option);
         assertEquals( expectedInvalidMessage+"\n",
+                outContent.toString());
+    }
+
+    @Test
+    public void testOptionCheckoutBook() {
+        //Given: As a user
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        //When: I supply option 2
+        int option = 2;
+        //Then: I want to be asked to specify which book to checkout
+        String expectedPrompt = "Please specify which book you want to checkout (Title)\n";
+        String expectedOptionMessage = "Please choose one of the following options:" +
+                "\n0 : for quitting Biblioteca" +
+                "\n1 : for displaying a List of Books" +
+                "\n2 : for checking out a book";
+
+        interacter.actOnChosenOption(option);
+        assertEquals( expectedPrompt+"\n"+expectedOptionMessage+"\n",
                 outContent.toString());
     }
 }

@@ -22,13 +22,34 @@ public class Library {
 
         String listOfBooks = "";
         for( int i = 0; i < getInventory().size(); i++) {
-            listOfBooks += this.inventory.get(i).toString();
-            listOfBooks += "\n";
+            if( this.inventory.get(i).isAvailable()) {
+                listOfBooks += this.inventory.get(i).toString();
+                listOfBooks += "\n";
+            }
         }
         return listOfBooks;
     }
 
     public ArrayList<Book> getInventory() {
         return this.inventory;
+    }
+
+    public boolean containsAvailable(String title) {
+        for( int i=0; i<this.getInventory().size(); i++) {
+            if( this.getInventory().get(i).getTitle().equals(title) && this.getInventory().get(i).isAvailable() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void checkout(String title) {
+        assert(this.containsAvailable(title));
+        for( int i=0; i<this.getInventory().size(); i++) {
+            if( title.equals(this.getInventory().get(i).getTitle()) ) {
+                this.getInventory().get(i).setAvailable(false);
+                return;
+            }
+        }
     }
 }

@@ -48,4 +48,38 @@ public class LibraryTest {
         String expectedListOfBooks = "title1,author1,1234\ntitle2,author2,5678\n";
         assertEquals( expectedListOfBooks, library.getListOfBooks());
     }
+
+    @Test
+    public void testLibraryContainsAvailableBook() {
+        //Given: As a user
+        Library library = new Library();
+        String bookTitle = "Alice in Wonderland";
+        //When: A book is in the library
+        boolean libraryContainsBook = library.containsAvailable(bookTitle);
+        //Then: I want to know that it is there
+        assertEquals( true, libraryContainsBook);
+    }
+
+    @Test
+    public void testLibraryDoesNotContainBook() {
+        //Given: As a user
+        Library library = new Library();
+        String bookTitle = "Gulivers Adventures";
+        //When: A book is in the library
+        boolean libraryContainsBook = library.containsAvailable(bookTitle);
+        //Then: I want to know that it is there
+        assertEquals( false, libraryContainsBook);
+    }
+
+    @Test
+    public void testCheckout() {
+        //Given: As a user
+        Library library = new Library();
+        String bookTitle = "Alice in Wonderland";
+        assert(library.containsAvailable(bookTitle));
+        //When: An existing book
+        library.checkout(bookTitle);
+        //Then: I want to checkout that book
+        assertEquals( false, library.containsAvailable(bookTitle));
+    }
 }
