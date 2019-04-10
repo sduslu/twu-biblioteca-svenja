@@ -61,4 +61,32 @@ public class BibliotecaAppTest {
         System.setIn(System.in);
     }
 
+
+   /* TODO make this test work
+   @Test
+    public void testReenterChoiceAfterInvalidChoice() {
+        //Given: As a user
+        //When: I enter an invalid choice
+        String simulatedUserInput = "-3" + System.getProperty("line.separator")
+                + "1" + System.getProperty("line.separator");
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream(simulatedUserInput.getBytes());
+        System.setIn(in);
+        BibliotecaApp.main(new String[1]);
+
+        //Then: I want to be able to enter another choice
+        String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
+        String expectedOptionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
+        String expectedInvalidMessage = "Please select a valid option!\n";
+        String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
+        Library library = new Library();
+        String expectedListOfBooks = library.getListOfBooks();
+
+        assertEquals( expectedWelcomeMessage+expectedOptionMessage+expectedInvalidMessage+expectedListTitle+
+                        expectedListOfBooks+"\n",
+                outContent.toString());
+
+        //Teardown
+        System.setIn(System.in);
+    }*/
 }

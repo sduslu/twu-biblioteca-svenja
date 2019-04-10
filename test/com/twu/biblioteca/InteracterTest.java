@@ -58,5 +58,74 @@ public class InteracterTest {
                 outContent.toString());
     }
 
+    @Test
+    public void testReadInputOptionFromUser() {
+        //Given
+        //When
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream("1".getBytes());
+        System.setIn(in);
+        //Then
+        assertEquals(1, Interacter.readInputOptionFromUser());
+        //Teardown
+        System.setIn(System.in);
+    }
+
+    @Test
+    public void testReadInvalidInputOptionFromUser() {
+        //Given: As a user
+        //When: I supply invalid input
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream("A".getBytes());
+        System.setIn(in);
+        //Then: The method readInputOtionFromUser() should return -1
+        assertEquals(-1, Interacter.readInputOptionFromUser());
+        //Teardown
+        System.setIn(System.in);
+    }
+
+    @Test
+    public void testReadNoInputOptionFromUser() {
+        //Given: As a user
+        //When: I supply no input at all
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream("".getBytes());
+        System.setIn(in);
+        //Then: The method readInputOtionFromUser() should return -1
+        assertEquals(-1, Interacter.readInputOptionFromUser());
+        //Teardown
+        System.setIn(System.in);
+    }
+
+    @Test
+    public void testActOnChosenOption() {
+        //Given:
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        //When: I supply option 1
+        int option = 1;
+        //Then: method actOnChosenOption(option) should print a list of all library books
+        String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
+        String expectedListOfBooks = library.getListOfBooks();
+
+        interacter.actOnChosenOption(option);
+        assertEquals( expectedListTitle+expectedListOfBooks+"\n",
+                outContent.toString());
+    }
+
+    @Test
+    public void testActOnChosenOptionInvalid() {
+        //Given: As a customer
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        //When: I supply an invalid option
+        int option = -5;
+        //Then: I want to be notified when I entered an invalid choice.
+        String expectedInvalidMessage = "Please select a valid option!";
+
+        interacter.actOnChosenOption(option);
+        assertEquals( expectedInvalidMessage+"\n",
+                outContent.toString());
+    }
 
 }

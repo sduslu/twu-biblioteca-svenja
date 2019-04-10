@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class Interacter {
 
-    Library library;
+    private Library library;
 
     public Interacter(Library library) {
         this.library = library;
@@ -32,13 +32,23 @@ public class Interacter {
         } catch (NullPointerException n) {
             n.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
-    public void actOnChosenOption(int option) {
+    public boolean actOnChosenOption(int option) {
         if( option == 1 ) {
             System.out.println("\nList of all library books (Title, Author, Year):\n");
             System.out.println(this.library.getListOfBooks());
+            return true;
+        } else if ( option < 0 ) {
+            System.out.println("Please select a valid option!");
         }
+        return false;
+    }
+
+    public boolean processMenu() {
+        int option = readInputOptionFromUser();
+        return actOnChosenOption(option);
+
     }
 }

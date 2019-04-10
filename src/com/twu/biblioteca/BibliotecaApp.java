@@ -9,9 +9,14 @@ public class BibliotecaApp {
 
         interacter.printWelcomeMessages(true);
 
-        int option = interacter.readInputOptionFromUser();
+        boolean keepGoing = true;
+        int tries = 0;
 
-        interacter.actOnChosenOption(option);
+        while( keepGoing && tries < 10 ) {
+            keepGoing = ! interacter.processMenu();
+
+        }
     }
+
 
 }
