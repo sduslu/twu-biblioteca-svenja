@@ -13,7 +13,7 @@ public class BibliotecaApp {
         int tries = 0;
 
         while( keepGoing && tries < 10 ) {
-            keepGoing = ! interacter.processMenu();
+            keepGoing = interacter.processMenu();
 
         }
     }

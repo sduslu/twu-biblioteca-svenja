@@ -53,7 +53,9 @@ public class InteracterTest {
 
         //Then: I want to see a menu of options before the list of all library books
         String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
-        String expectedOptionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
+        String expectedOptionMessage = "Please choose one of the following options:" +
+                "\n0 : for quitting Biblioteca" +
+                "\n1 : for displaying a List of Books\n";
         assertEquals( expectedWelcomeMessage+expectedOptionMessage,
                 outContent.toString());
     }
@@ -107,9 +109,12 @@ public class InteracterTest {
         //Then: method actOnChosenOption(option) should print a list of all library books
         String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
         String expectedListOfBooks = library.getListOfBooks();
+        String expectedOptionMessage = "Please choose one of the following options:" +
+                "\n0 : for quitting Biblioteca" +
+                "\n1 : for displaying a List of Books";
 
         interacter.actOnChosenOption(option);
-        assertEquals( expectedListTitle+expectedListOfBooks+"\n",
+        assertEquals( expectedListTitle+expectedListOfBooks+"\n"+"\n"+expectedOptionMessage+"\n",
                 outContent.toString());
     }
 
@@ -128,4 +133,18 @@ public class InteracterTest {
                 outContent.toString());
     }
 
+    @Test
+    public void testQuitApplication() {
+        //Given: As a customer
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        //When: I want to stop using the App
+        int option = 0;
+        //Then: I can choose the option to quit
+        String expectedInvalidMessage = "Exiting Biblioteca. See you soon!";
+
+        interacter.actOnChosenOption(option);
+        assertEquals( expectedInvalidMessage+"\n",
+                outContent.toString());
+    }
 }

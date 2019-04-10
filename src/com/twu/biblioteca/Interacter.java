@@ -15,8 +15,14 @@ public class Interacter {
     public static void printWelcomeMessages(boolean includeOptionMenu) {
         System.out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
         if(includeOptionMenu) {
-            System.out.println("\nPlease choose one of the following options:\n1 : for displaying a List of Books");
+            printOptionMessage();
         }
+    }
+
+    private static void printOptionMessage() {
+        System.out.println("\nPlease choose one of the following options:" +
+                "\n0 : for quitting Biblioteca" +
+                "\n1 : for displaying a List of Books");
     }
 
     public static int readInputOptionFromUser() {
@@ -26,6 +32,8 @@ public class Interacter {
             String input = reader.readLine();
             if (input.equals("1")) {
                 return 1;
+            } else if( input.equals("0") ) {
+                return 0;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,16 +47,18 @@ public class Interacter {
         if( option == 1 ) {
             System.out.println("\nList of all library books (Title, Author, Year):\n");
             System.out.println(this.library.getListOfBooks());
-            return true;
-        } else if ( option < 0 ) {
+            printOptionMessage();
+        } else if( option == 0 ) {
+            System.out.println("Exiting Biblioteca. See you soon!");
+            return false;
+        } else if( option < 0 ) {
             System.out.println("Please select a valid option!");
         }
-        return false;
+        return true;
     }
 
     public boolean processMenu() {
         int option = readInputOptionFromUser();
         return actOnChosenOption(option);
-
     }
 }
