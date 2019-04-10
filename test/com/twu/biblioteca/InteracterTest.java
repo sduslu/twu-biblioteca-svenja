@@ -206,4 +206,25 @@ public class InteracterTest {
         //Teardown
         System.setIn(System.in);
     }
+
+    @Test
+    public void testReturnSuccessMessage() {
+        //Given: As a user
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        String bookTitle = "Alice in Wonderland";
+        assert(library.containsAvailable(bookTitle));
+        library.getInventory().get(0).setAvailable(false);
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream(bookTitle.getBytes());
+        System.setIn(in);
+
+        //When: Checking out a book successfully
+        interacter.actOnChosenOption(3);
+        //Then: I want to see a success message
+        String expectedReturnMessage = "Thank you for returning the book\n\n";
+        assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
+        //Teardown
+        System.setIn(System.in);
+    }
 }

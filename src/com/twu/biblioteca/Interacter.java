@@ -73,7 +73,7 @@ public class Interacter {
             String bookTitle = readInputBookFromUser();
             if( this.library.containsCheckedoutBook(bookTitle)) {
                 this.library.returnBook(bookTitle);
-                System.out.println("Thank you! Enjoy the book");
+                System.out.println("Thank you for returning the book");
             }
             else {
                 System.out.println("Sorry, that book is not available");
