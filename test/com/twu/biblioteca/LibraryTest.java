@@ -71,7 +71,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void testCheckout() {
+    public void testSuccessfulCheckout() {
         //Given: As a user
         Library library = new Library();
         String bookTitle = "Alice in Wonderland";
@@ -81,5 +81,4 @@ public class LibraryTest {
         //Then: I want to checkout that book
         assertEquals( false, library.containsAvailable(bookTitle));
     }
-
 }

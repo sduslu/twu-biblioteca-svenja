@@ -156,10 +156,12 @@ public class InteracterTest {
         Interacter interacter = new Interacter(library);
         //When: I supply option 2
         int option = 2;
-        //Then: I want to be asked to specify which book to checkout
-
         interacter.actOnChosenOption(option);
-        assertEquals( expectedCheckoutPrompt+"\n"+expectedOptionMessage,
+
+        //Then: I want to be asked to specify which book to checkout
+        String expectedCheckoutMessage = "Sorry, that book is not available\n\n";
+
+        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage,
                 outContent.toString());
     }
 
@@ -178,6 +180,26 @@ public class InteracterTest {
         interacter.actOnChosenOption(2);
         //Then: I want to see a success message
         String expectedCheckoutMessage = "Thank you! Enjoy the book\n\n";
+        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
+        //Teardown
+        System.setIn(System.in);
+    }
+
+    @Test
+    public void testCheckoutFailedMessage() {
+        //Given: As a user
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        String bookTitle = "Peter Pan";
+        assert( !library.containsAvailable(bookTitle) );
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream(bookTitle.getBytes());
+        System.setIn(in);
+
+        //When: Checking out a book unsuccessfully
+        interacter.actOnChosenOption(2);
+        //Then: I want to see a failing message
+        String expectedCheckoutMessage = "Sorry, that book is not available\n\n";
         assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
         //Teardown
         System.setIn(System.in);

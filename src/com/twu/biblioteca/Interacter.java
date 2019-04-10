@@ -61,6 +61,9 @@ public class Interacter {
                 this.library.checkout(bookTitle);
                 System.out.println("Thank you! Enjoy the book");
             }
+            else {
+                System.out.println("Sorry, that book is not available");
+            }
             printOptionMessage();
         }
         else if( option < 0 ) {
