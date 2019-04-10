@@ -23,7 +23,8 @@ public class Interacter {
         System.out.println("\nPlease choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
                 "\n1 : for displaying a List of Books" +
-                "\n2 : for checking out a book");
+                "\n2 : for checking out a book" +
+                "\n3 : for returning a book");
     }
 
     public static int readInputOptionFromUser() {
@@ -37,6 +38,8 @@ public class Interacter {
                 return 0;
             } else if( input.equals("2")) {
                 return 2;
+            } else if( input.equals("3")) {
+                return 3;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,6 +62,17 @@ public class Interacter {
             String bookTitle = readInputBookFromUser();
             if( this.library.containsAvailable(bookTitle)) {
                 this.library.checkout(bookTitle);
+                System.out.println("Thank you! Enjoy the book");
+            }
+            else {
+                System.out.println("Sorry, that book is not available");
+            }
+            printOptionMessage();
+        } else if( option == 3 ) {
+            System.out.println("Please specify which book you want to return (Title)");
+            String bookTitle = readInputBookFromUser();
+            if( this.library.containsCheckedoutBook(bookTitle)) {
+                this.library.returnBook(bookTitle);
                 System.out.println("Thank you! Enjoy the book");
             }
             else {

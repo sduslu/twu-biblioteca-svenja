@@ -17,8 +17,10 @@ public class InteracterTest {
     private String expectedOptionMessage = "Please choose one of the following options:" +
             "\n0 : for quitting Biblioteca" +
             "\n1 : for displaying a List of Books" +
-            "\n2 : for checking out a book\n";
+            "\n2 : for checking out a book" +
+            "\n3 : for returning a book\n";
     private String expectedCheckoutPrompt = "Please specify which book you want to checkout (Title)\n";
+    private String expectedReturnPrompt = "Please specify which book you want to return (Title)\n";
 
 
     //Streams for testing the command line outputs:

@@ -43,11 +43,30 @@ public class Library {
         return false;
     }
 
+    public boolean containsCheckedoutBook(String title) {
+        for( int i=0; i<this.getInventory().size(); i++) {
+            if( this.getInventory().get(i).getTitle().equals(title) && !this.getInventory().get(i).isAvailable() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void checkout(String title) {
         assert(this.containsAvailable(title));
         for( int i=0; i<this.getInventory().size(); i++) {
             if( title.equals(this.getInventory().get(i).getTitle()) ) {
                 this.getInventory().get(i).setAvailable(false);
+                return;
+            }
+        }
+    }
+
+    public void returnBook(String title) {
+        assert(this.containsCheckedoutBook(title));
+        for( int i=0; i<this.getInventory().size(); i++) {
+            if( title.equals(this.getInventory().get(i).getTitle()) && !this.getInventory().get(i).isAvailable()) {
+                this.getInventory().get(i).setAvailable(true);
                 return;
             }
         }

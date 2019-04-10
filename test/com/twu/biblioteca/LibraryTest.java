@@ -81,4 +81,30 @@ public class LibraryTest {
         //Then: I want to checkout that book
         assertEquals( false, library.containsAvailable(bookTitle));
     }
+
+    @Test
+    public void testContainsCheckedoutBook() {
+        //Given
+        Library library = new Library();
+        library.getInventory().get(0).setAvailable(false);
+        String bookTitle = "Alice in Wonderland";
+        assert( !library.containsAvailable(bookTitle) );
+        //When Asked if the book belongs to the library, but is not available
+        boolean bookIsCheckedout = library.containsCheckedoutBook(bookTitle);
+        //Then should tell me this.
+        assertEquals( true, bookIsCheckedout);
+    }
+
+    @Test
+    public void testSuccessfulReturn() {
+        //Given: As a librarian
+        Library library = new Library();
+        library.getInventory().get(0).setAvailable(false);
+        String bookTitle = "Alice in Wonderland";
+        assert( !library.containsAvailable(bookTitle) );
+        //When: A user returns a book
+        library.returnBook(bookTitle);
+        //Then: I want t that book to appear in the List of available books again.
+        assertEquals( true, library.containsAvailable(bookTitle));
+    }
 }
