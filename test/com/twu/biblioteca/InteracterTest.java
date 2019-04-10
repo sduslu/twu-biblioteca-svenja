@@ -12,6 +12,14 @@ import static org.junit.Assert.assertEquals;
 
 public class InteracterTest {
 
+    //Expected Messages:
+    private String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
+    private String expectedOptionMessage = "Please choose one of the following options:" +
+            "\n0 : for quitting Biblioteca" +
+            "\n1 : for displaying a List of Books" +
+            "\n2 : for checking out a book\n";
+    private String expectedCheckoutPrompt = "Please specify which book you want to checkout (Title)\n";
+
 
     //Streams for testing the command line outputs:
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -39,7 +47,6 @@ public class InteracterTest {
         Interacter.printWelcomeMessages(false);
 
         //Then: I want to see a welcome message
-        String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
         assertEquals( expectedWelcomeMessage,
                 outContent.toString());
     }
@@ -52,12 +59,8 @@ public class InteracterTest {
         Interacter.printWelcomeMessages(true);
 
         //Then: I want to see a menu of options before the list of all library books
-        String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
-        String expectedOptionMessage = "Please choose one of the following options:" +
-                "\n0 : for quitting Biblioteca" +
-                "\n1 : for displaying a List of Books" +
-                "\n2 : for checking out a book\n";
-        assertEquals( expectedWelcomeMessage+expectedOptionMessage,
+
+        assertEquals( expectedWelcomeMessage+"\n"+expectedOptionMessage,
                 outContent.toString());
     }
 
@@ -110,13 +113,9 @@ public class InteracterTest {
         //Then: method actOnChosenOption(option) should print a list of all library books
         String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
         String expectedListOfBooks = library.getListOfBooks();
-        String expectedOptionMessage = "Please choose one of the following options:" +
-                "\n0 : for quitting Biblioteca" +
-                "\n1 : for displaying a List of Books" +
-                "\n2 : for checking out a book";
 
         interacter.actOnChosenOption(option);
-        assertEquals( expectedListTitle+expectedListOfBooks+"\n"+"\n"+expectedOptionMessage+"\n",
+        assertEquals( expectedListTitle+expectedListOfBooks+"\n"+"\n"+expectedOptionMessage,
                 outContent.toString());
     }
 
@@ -158,14 +157,29 @@ public class InteracterTest {
         //When: I supply option 2
         int option = 2;
         //Then: I want to be asked to specify which book to checkout
-        String expectedPrompt = "Please specify which book you want to checkout (Title)\n";
-        String expectedOptionMessage = "Please choose one of the following options:" +
-                "\n0 : for quitting Biblioteca" +
-                "\n1 : for displaying a List of Books" +
-                "\n2 : for checking out a book";
 
         interacter.actOnChosenOption(option);
-        assertEquals( expectedPrompt+"\n"+expectedOptionMessage+"\n",
+        assertEquals( expectedCheckoutPrompt+"\n"+expectedOptionMessage,
                 outContent.toString());
+    }
+
+    @Test
+    public void testCheckoutSuccessMessage() {
+        //Given: As a user
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
+        String bookTitle = "Alice in Wonderland";
+        assert(library.containsAvailable(bookTitle));
+        ByteArrayInputStream in;
+        in = new ByteArrayInputStream(bookTitle.getBytes());
+        System.setIn(in);
+
+        //When: Checking out a book successfully
+        interacter.actOnChosenOption(2);
+        //Then: I want to see a success message
+        String expectedCheckoutMessage = "Thank you! Enjoy the book\n\n";
+        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
+        //Teardown
+        System.setIn(System.in);
     }
 }

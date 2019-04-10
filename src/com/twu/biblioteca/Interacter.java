@@ -59,6 +59,7 @@ public class Interacter {
             String bookTitle = readInputBookFromUser();
             if( this.library.containsAvailable(bookTitle)) {
                 this.library.checkout(bookTitle);
+                System.out.println("Thank you! Enjoy the book");
             }
             printOptionMessage();
         }

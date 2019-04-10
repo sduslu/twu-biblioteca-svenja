@@ -3,7 +3,6 @@ package com.twu.biblioteca;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.ListResourceBundle;
 
 import static org.junit.Assert.assertEquals;
 
@@ -82,4 +81,5 @@ public class LibraryTest {
         //Then: I want to checkout that book
         assertEquals( false, library.containsAvailable(bookTitle));
     }
+
 }
