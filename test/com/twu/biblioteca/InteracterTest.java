@@ -4,12 +4,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
-public class BibliotecaOutputWriterTest {
+public class InteracterTest {
+
 
     //Streams for testing the command line outputs:
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -31,12 +33,12 @@ public class BibliotecaOutputWriterTest {
 
     @Test
     public void testSimpleWelcomeMessage() {
-        //Given
+        //Given: As a user
 
-        //When
-        BibliotecaOutputWriter.printWelcomeMessages(false);
+        //When: I start the application
+        Interacter.printWelcomeMessages(false);
 
-        //Then
+        //Then: I want to see a welcome message
         String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
         assertEquals( expectedWelcomeMessage,
                 outContent.toString());
@@ -44,15 +46,17 @@ public class BibliotecaOutputWriterTest {
 
     @Test
     public void testWelcomeMessageWithBookList() {
-        //Given
+        //Given: As a user
 
-        //When
-        BibliotecaOutputWriter.printWelcomeMessages(true);
+        //When: After the welcome message appears
+        Interacter.printWelcomeMessages(true);
 
-        //Then
+        //Then: I want to see a menu of options before the list of all library books
         String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n\n";
         String expectedOptionMessage = "Please choose one of the following options:\n1 : for displaying a List of Books\n";
         assertEquals( expectedWelcomeMessage+expectedOptionMessage,
                 outContent.toString());
     }
+
+
 }

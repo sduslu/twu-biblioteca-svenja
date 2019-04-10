@@ -4,16 +4,14 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
 
-        BibliotecaOutputWriter bOutputWriter = new BibliotecaOutputWriter();
-        bOutputWriter.printWelcomeMessages(true);
+        Library library = new Library();
+        Interacter interacter = new Interacter(library);
 
-        BibliotecaInputReader bInputReader = new BibliotecaInputReader();
-        int option = bInputReader.readInputOptionFromUser();
+        interacter.printWelcomeMessages(true);
 
-        BibliotecaLibrary bLibrary = new BibliotecaLibrary();
+        int option = interacter.readInputOptionFromUser();
 
-        BibliotecaOptionHandler bOptionHandler = new BibliotecaOptionHandler(bLibrary);
-        bOptionHandler.actOnChosenOption(option);
+        interacter.actOnChosenOption(option);
     }
 
 }

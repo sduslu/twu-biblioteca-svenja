@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
-public class BibliotecaLibrary {
+public class Library {
+
 
     public static String getListOfBooks() {
         String listOfBooks = "Alice in Wonderland,Lewis Carrol,1865\n";
@@ -8,4 +9,5 @@ public class BibliotecaLibrary {
         listOfBooks += "The Lord of the Rings,J. R. R. Tolkien,1954\n";
         return listOfBooks;
     }
+
 }
