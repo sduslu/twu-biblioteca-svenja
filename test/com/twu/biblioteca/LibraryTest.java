@@ -76,9 +76,9 @@ public class LibraryTest {
         Library library = new Library();
         String bookTitle = "Alice in Wonderland";
         assert(library.containsAvailable(bookTitle));
-        //When: An existing book
+        //When: I checkout an existing book
         library.checkout(bookTitle);
-        //Then: I want to checkout that book
+        //Then: I want this book to be no longer in the available book list
         assertEquals( false, library.containsAvailable(bookTitle));
     }
 

@@ -10,11 +10,9 @@ public class BibliotecaApp {
         interacter.printWelcomeMessages(true);
 
         boolean keepGoing = true;
-        int tries = 0;
 
-        while( keepGoing && tries < 10 ) {
+        while( keepGoing ) {
             keepGoing = interacter.processMenu();
-
         }
     }
 

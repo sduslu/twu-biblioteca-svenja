@@ -21,9 +21,9 @@ public class Library {
     public String getListOfBooks() {
 
         String listOfBooks = "";
-        for( int i = 0; i < getInventory().size(); i++) {
-            if( this.inventory.get(i).isAvailable()) {
-                listOfBooks += this.inventory.get(i).toString();
+        for( Book book : this.getInventory() ) {
+            if( book.isAvailable()) {
+                listOfBooks += book.toString();
                 listOfBooks += "\n";
             }
         }
@@ -35,8 +35,8 @@ public class Library {
     }
 
     public boolean containsAvailable(String title) {
-        for( int i=0; i<this.getInventory().size(); i++) {
-            if( this.getInventory().get(i).getTitle().equals(title) && this.getInventory().get(i).isAvailable() ) {
+        for( Book book : this.getInventory() ) {
+            if( book.getTitle().equals(title) && book.isAvailable() ) {
                 return true;
             }
         }
@@ -44,8 +44,8 @@ public class Library {
     }
 
     public boolean containsCheckedoutBook(String title) {
-        for( int i=0; i<this.getInventory().size(); i++) {
-            if( this.getInventory().get(i).getTitle().equals(title) && !this.getInventory().get(i).isAvailable() ) {
+        for( Book book : this.getInventory()) {
+            if( book.getTitle().equals(title) && !book.isAvailable() ) {
                 return true;
             }
         }
@@ -54,9 +54,9 @@ public class Library {
 
     public void checkout(String title) {
         assert(this.containsAvailable(title));
-        for( int i=0; i<this.getInventory().size(); i++) {
-            if( title.equals(this.getInventory().get(i).getTitle()) ) {
-                this.getInventory().get(i).setAvailable(false);
+        for( Book book : this.getInventory()) {
+            if( title.equals(book.getTitle()) ) {
+                book.setAvailable(false);
                 return;
             }
         }
@@ -64,9 +64,9 @@ public class Library {
 
     public void returnBook(String title) {
         assert(this.containsCheckedoutBook(title));
-        for( int i=0; i<this.getInventory().size(); i++) {
-            if( title.equals(this.getInventory().get(i).getTitle()) && !this.getInventory().get(i).isAvailable()) {
-                this.getInventory().get(i).setAvailable(true);
+        for( Book book : this.getInventory()) {
+            if( title.equals(book.getTitle()) && !book.isAvailable()) {
+                book.setAvailable(true);
                 return;
             }
         }

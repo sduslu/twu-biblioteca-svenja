@@ -32,10 +32,10 @@ public class Interacter {
                 new BufferedReader(new InputStreamReader(System.in));
         try {
             String input = reader.readLine();
-            if (input.equals("1")) {
-                return 1;
-            } else if( input.equals("0") ) {
+            if (input.equals("0")) {
                 return 0;
+            } else if( input.equals("1") ) {
+                return 1;
             } else if( input.equals("2")) {
                 return 2;
             } else if( input.equals("3")) {
@@ -50,35 +50,17 @@ public class Interacter {
     }
 
     public boolean actOnChosenOption(int option) {
-        if( option == 1 ) {
+        if( option == 0 ) {
+            System.out.println("Exiting Biblioteca. See you soon!");
+            return false;
+        } else if( option == 1 ) {
             System.out.println("\nList of all library books (Title, Author, Year):\n");
             System.out.println(this.library.getListOfBooks());
             printOptionMessage();
-        } else if( option == 0 ) {
-            System.out.println("Exiting Biblioteca. See you soon!");
-            return false;
         } else if( option == 2 ) {
-            System.out.println("Please specify which book you want to checkout (Title)");
-            String bookTitle = readInputBookFromUser();
-            if( this.library.containsAvailable(bookTitle)) {
-                this.library.checkout(bookTitle);
-                System.out.println("Thank you! Enjoy the book");
-            }
-            else {
-                System.out.println("Sorry, that book is not available");
-            }
-            printOptionMessage();
+            this.handleBookCheckout();
         } else if( option == 3 ) {
-            System.out.println("Please specify which book you want to return (Title)");
-            String bookTitle = readInputBookFromUser();
-            if( this.library.containsCheckedoutBook(bookTitle)) {
-                this.library.returnBook(bookTitle);
-                System.out.println("Thank you for returning the book");
-            }
-            else {
-                System.out.println("That is not a valid book to return.");
-            }
-            printOptionMessage();
+            this.handleBookReturn();
         }
         else if( option < 0 ) {
             System.out.println("Please select a valid option!");
@@ -104,5 +86,31 @@ public class Interacter {
             n.printStackTrace();
         }
         return input;
+    }
+
+    public void handleBookCheckout() {
+        System.out.println("Please specify which book you want to checkout (Title)");
+        String bookTitle = readInputBookFromUser();
+        if( this.library.containsAvailable(bookTitle)) {
+            this.library.checkout(bookTitle);
+            System.out.println("Thank you! Enjoy the book");
+        }
+        else {
+            System.out.println("Sorry, that book is not available");
+        }
+        printOptionMessage();
+    }
+
+    public void handleBookReturn() {
+        System.out.println("Please specify which book you want to return (Title)");
+        String bookTitle = readInputBookFromUser();
+        if( this.library.containsCheckedoutBook(bookTitle)) {
+            this.library.returnBook(bookTitle);
+            System.out.println("Thank you for returning the book");
+        }
+        else {
+            System.out.println("That is not a valid book to return.");
+        }
+        printOptionMessage();
     }
 }

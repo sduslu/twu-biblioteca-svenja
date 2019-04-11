@@ -179,7 +179,7 @@ public class InteracterTest {
         System.setIn(in);
 
         //When: Checking out a book successfully
-        interacter.actOnChosenOption(2);
+        interacter.handleBookCheckout();
         //Then: I want to see a success message
         String expectedCheckoutMessage = "Thank you! Enjoy the book\n\n";
         assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
@@ -199,7 +199,7 @@ public class InteracterTest {
         System.setIn(in);
 
         //When: Checking out a book unsuccessfully
-        interacter.actOnChosenOption(2);
+        interacter.handleBookCheckout();
         //Then: I want to see a failing message
         String expectedCheckoutMessage = "Sorry, that book is not available\n\n";
         assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
@@ -220,7 +220,7 @@ public class InteracterTest {
         System.setIn(in);
 
         //When: Returning a book successfully
-        interacter.actOnChosenOption(3);
+        interacter.handleBookReturn();
         //Then: I want to see a success message
         String expectedReturnMessage = "Thank you for returning the book\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
@@ -240,7 +240,7 @@ public class InteracterTest {
         System.setIn(in);
 
         //When: Returning a book that does not belong to this library
-        interacter.actOnChosenOption(3);
+        interacter.handleBookReturn();
         //Then: I want to see a failure message
         String expectedReturnMessage = "That is not a valid book to return.\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
@@ -260,11 +260,12 @@ public class InteracterTest {
         System.setIn(in);
 
         //When: Returning a book that is not checked out (still available)
-        interacter.actOnChosenOption(3);
+        interacter.handleBookReturn();
         //Then: I want to see a failure message
         String expectedReturnMessage = "That is not a valid book to return.\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
         //Teardown
         System.setIn(System.in);
     }
+
 }
