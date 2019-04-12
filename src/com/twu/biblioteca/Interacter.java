@@ -36,7 +36,7 @@ public class Interacter {
             return false;
         } else if( option == 1 ) {
             this.printStream.println("\nList of all library books (Title, Author, Year):\n");
-            this.printStream.println(this.library.getListOfBooks());
+            this.printStream.println(this.library.getListOfMediums(1));
             printOptionMessage();
         } else if( option == 2 ) {
             this.handleBookCheckout();

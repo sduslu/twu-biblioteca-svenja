@@ -14,8 +14,8 @@ public class LibraryTest {
         //When
         Library library = new Library();
         //Then
-        assertEquals(3, library.getInventory().size());
-        assertEquals("Charles Dickens", library.getInventory().get(1).getAuthor());
+        assertEquals(3, library.getInventoryBooks().size());
+        assertEquals("Charles Dickens", library.getInventoryBooks().get(1).getAuthor());
     }
 
     @Test
@@ -27,10 +27,10 @@ public class LibraryTest {
         shortListOfBooks.add(book1);
         shortListOfBooks.add(book2);
         //When
-        Library library = new Library(shortListOfBooks);
+        Library library = new Library(shortListOfBooks, new ArrayList<Movie>());
         //Then
-        assertEquals( 2, library.getInventory().size());
-        assertEquals(1234, library.getInventory().get(0).getYear());
+        assertEquals( 2, library.getInventoryBooks().size());
+        assertEquals(1234, library.getInventoryBooks().get(0).getYear());
     }
 
     @Test
@@ -42,10 +42,46 @@ public class LibraryTest {
         shortListOfBooks.add(book1);
         shortListOfBooks.add(book2);
         //When
-        Library library = new Library(shortListOfBooks);
+        Library library = new Library(shortListOfBooks, new ArrayList<Movie>());
         //Then
         String expectedListOfBooks = "title1,author1,1234\ntitle2,author2,5678\n";
-        assertEquals( expectedListOfBooks, library.getListOfBooks());
+        assertEquals( expectedListOfBooks, library.getListOfMediums(1));
+    }
+
+    @Test
+    public void testGetListOfMovies() {
+        //Given
+        Movie movie1 = new Movie("title1", "director1", 5, 1234);
+        Movie movie2 = new Movie("title2", "director2", 10, 5678);
+        ArrayList<Movie> shortListOfMovies = new ArrayList<Movie> ();
+        shortListOfMovies.add(movie1);
+        shortListOfMovies.add(movie2);
+        //When
+        Library library = new Library(new ArrayList<Book>(), shortListOfMovies);
+        //Then
+        String expectedListOfMovies = "title1,director1,5,1234\ntitle2,director2,10,5678\n";
+        assertEquals( expectedListOfMovies, library.getListOfMediums(2));
+    }
+
+    @Test
+    public void testGetListOfMediums() {
+        //Given
+        Book book1 = new Book("title1", "author1", 1234);
+        Book book2 = new Book("title2", "author2", 5678);
+        ArrayList<Book> shortListOfBooks = new ArrayList<Book> ();
+        shortListOfBooks.add(book1);
+        shortListOfBooks.add(book2);
+        Movie movie1 = new Movie("title1", "director1", 5, 1234);
+        Movie movie2 = new Movie("title2", "director2", 10, 5678);
+        ArrayList<Movie> shortListOfMovies = new ArrayList<Movie> ();
+        shortListOfMovies.add(movie1);
+        shortListOfMovies.add(movie2);
+        //When
+        Library library = new Library(shortListOfBooks, shortListOfMovies);
+        //Then
+        String expectedListOfBooks = "title1,author1,1234\ntitle2,author2,5678\n";
+        String expectedListOfMovies = "title1,director1,5,1234\ntitle2,director2,10,5678\n";
+        assertEquals( expectedListOfBooks+expectedListOfMovies, library.getListOfMediums(0));
     }
 
     @Test
@@ -86,7 +122,7 @@ public class LibraryTest {
     public void testContainsCheckedoutBook() {
         //Given
         Library library = new Library();
-        library.getInventory().get(0).setAvailable(false);
+        library.getInventoryBooks().get(0).setAvailable(false);
         String bookTitle = "Alice in Wonderland";
         assert( !library.containsAvailable(bookTitle) );
         //When Asked if the book belongs to the library, but is not available
@@ -99,7 +135,7 @@ public class LibraryTest {
     public void testSuccessfulReturn() {
         //Given: As a librarian
         Library library = new Library();
-        library.getInventory().get(0).setAvailable(false);
+        library.getInventoryBooks().get(0).setAvailable(false);
         String bookTitle = "Alice in Wonderland";
         assert( !library.containsAvailable(bookTitle) );
         //When: A user returns a book

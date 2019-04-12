@@ -84,7 +84,7 @@ public class InteracterTest {
     public void testActOnChosenOption() {
         //Given:
         String expectedListTitle = "\nList of all library books (Title, Author, Year):\n";
-        String expectedListOfBooks = library.getListOfBooks();
+        String expectedListOfBooks = library.getListOfMediums(1);
 
         //When: I supply option 1
         int option = 1;
@@ -174,7 +174,7 @@ public class InteracterTest {
     public void testReturnSuccessMessage() {
         //Given: As a user, when I return a book that belongs to the library
         when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
-        library.getInventory().get(0).setAvailable(false);
+        library.getInventoryBooks().get(0).setAvailable(false);
 
         //When: Returning a book successfully
         interacter.handleBookReturn();
