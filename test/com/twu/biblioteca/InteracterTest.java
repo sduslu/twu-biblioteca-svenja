@@ -8,26 +8,22 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class InteracterTest {
 
     //Expected Messages:
-    private String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-    private String expectedOptionMessage = "Please choose one of the following options:" +
+    private String expectedWelcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
+    private String expectedOptionMessage = "\nPlease choose one of the following options:" +
             "\n0 : for quitting Biblioteca" +
             "\n1 : for displaying a List of Books" +
             "\n2 : for checking out a book" +
-            "\n3 : for returning a book\n";
-    private String expectedCheckoutPrompt = "Please specify which book you want to checkout (Title)\n";
-    private String expectedReturnPrompt = "Please specify which book you want to return (Title)\n";
-
+            "\n3 : for returning a book";
+    private String expectedCheckoutPrompt = "Please specify which book you want to checkout (Title)";
+    private String expectedReturnPrompt = "Please specify which book you want to return (Title)";
 
     //Streams for testing the command line outputs:
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -41,19 +37,19 @@ public class InteracterTest {
     @Mock
     UserInputReader userInputReaderMock;
 
+    @Mock
+    PrintStream printStreamMock;
+
     Interacter interacter;
-    PrintStream printStream;
     Library library;
-
-
 
     @Before
     public void setUpStreamsAndInstantiateInteracter() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
         library = new Library();
-        printStream = System.out;
-        interacter = new Interacter(library, printStream, userInputReaderMock);
+//        printStreamMock = mock(PrintStream.class);
+        interacter = new Interacter(library, printStreamMock, userInputReaderMock);
     }
 
     @After
@@ -64,56 +60,53 @@ public class InteracterTest {
 
     @Test
     public void testSimpleWelcomeMessage() {
-        //Given: As a user
+        //Given
 
-        //When: I start the application
+        //When
         interacter.printWelcomeMessages(false);
 
-        //Then: I want to see a welcome message
-        assertEquals( expectedWelcomeMessage,
-                outContent.toString());
+        //Then
+        verify(printStreamMock).println(expectedWelcomeMessage);
     }
 
     @Test
     public void testWelcomeMessageWithBookList() {
-        //Given: As a user
+        //Given
 
-        //When: After the welcome message appears
+        //When
         interacter.printWelcomeMessages(true);
 
-        //Then: I want to see a menu of options before the list of all library books
-
-        assertEquals( expectedWelcomeMessage+"\n"+expectedOptionMessage,
-                outContent.toString());
+        //Then
+        verify(printStreamMock).println(expectedWelcomeMessage);
     }
 
     @Test
     public void testActOnChosenOption() {
         //Given:
+        String expectedListTitle = "\nList of all library books (Title, Author, Year):\n";
+        String expectedListOfBooks = library.getListOfBooks();
 
         //When: I supply option 1
         int option = 1;
-        //Then: method actOnChosenOption(option) should print a list of all library books
-        String expectedListTitle = "\nList of all library books (Title, Author, Year):\n\n";
-        String expectedListOfBooks = library.getListOfBooks();
-
         interacter.actOnChosenOption(option);
-        assertEquals( expectedListTitle+expectedListOfBooks+"\n"+"\n"+expectedOptionMessage,
-                outContent.toString());
+
+        //Then: method actOnChosenOption(option) should print a list of all library books
+        verify(printStreamMock).println(expectedListTitle);
+        verify(printStreamMock).println(expectedListOfBooks);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
     @Test
     public void testActOnChosenOptionInvalid() {
         //Given: As a customer
+        String expectedInvalidMessage = "Please select a valid option!";
 
         //When: I supply an invalid option
         int option = -5;
-        //Then: I want to be notified when I entered an invalid choice.
-        String expectedInvalidMessage = "Please select a valid option!";
-
         interacter.actOnChosenOption(option);
-        assertEquals( expectedInvalidMessage+"\n",
-                outContent.toString());
+
+        //Then: I want to be notified when I entered an invalid choice.
+        verify(printStreamMock).println(expectedInvalidMessage);
     }
 
     @Test
@@ -122,12 +115,11 @@ public class InteracterTest {
 
         //When: I want to stop using the App
         int option = 0;
-        //Then: I can choose the option to quit
         String expectedInvalidMessage = "Exiting Biblioteca. See you soon!";
-
         interacter.actOnChosenOption(option);
-        assertEquals( expectedInvalidMessage+"\n",
-                outContent.toString());
+
+        //Then: I can choose the option to quit
+        verify(printStreamMock).println(expectedInvalidMessage);
     }
 
     @Test
@@ -140,10 +132,11 @@ public class InteracterTest {
         interacter.actOnChosenOption(option);
 
         //Then: I want to be asked to specify which book to checkout
-        String expectedCheckoutMessage = "Sorry, that book is not available\n\n";
+        String expectedCheckoutMessage = "Sorry, that book is not available";
 
-        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage,
-                outContent.toString());
+        verify(printStreamMock).println(expectedCheckoutPrompt);
+        verify(printStreamMock).println(expectedCheckoutMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
     @Test
@@ -155,8 +148,10 @@ public class InteracterTest {
         interacter.handleBookCheckout();
 
         //Then: I want to see a success message
-        String expectedCheckoutMessage = "Thank you! Enjoy the book\n\n";
-        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
+        String expectedCheckoutMessage = "Thank you! Enjoy the book";
+        verify(printStreamMock).println(expectedCheckoutPrompt);
+        verify(printStreamMock).println(expectedCheckoutMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
     @Test
@@ -168,8 +163,11 @@ public class InteracterTest {
         interacter.handleBookCheckout();
 
         //Then: I want to see a failing message
-        String expectedCheckoutMessage = "Sorry, that book is not available\n\n";
-        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
+        String expectedCheckoutMessage = "Sorry, that book is not available";
+//        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
+        verify(printStreamMock).println(expectedCheckoutPrompt);
+        verify(printStreamMock).println(expectedCheckoutMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
     @Test
@@ -182,8 +180,10 @@ public class InteracterTest {
         interacter.handleBookReturn();
 
         //Then: I want to see a success message
-        String expectedReturnMessage = "Thank you for returning the book\n\n";
-        assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
+        String expectedReturnMessage = "Thank you for returning the book";
+        verify(printStreamMock).println(expectedReturnPrompt);
+        verify(printStreamMock).println(expectedReturnMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
     @Test
@@ -194,8 +194,10 @@ public class InteracterTest {
         //When: Returning a book that does not belong to this library
         interacter.handleBookReturn();
         //Then: I want to see a failure message
-        String expectedReturnMessage = "That is not a valid book to return.\n\n";
-        assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
+        String expectedReturnMessage = "That is not a valid book to return.";
+        verify(printStreamMock).println(expectedReturnPrompt);
+        verify(printStreamMock).println(expectedReturnMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
     @Test
@@ -207,8 +209,10 @@ public class InteracterTest {
         interacter.handleBookReturn();
 
         //Then: I want to see a failure message
-        String expectedReturnMessage = "That is not a valid book to return.\n\n";
-        assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
+        String expectedReturnMessage = "That is not a valid book to return.";
+        verify(printStreamMock).println(expectedReturnPrompt);
+        verify(printStreamMock).println(expectedReturnMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
     }
 
 }

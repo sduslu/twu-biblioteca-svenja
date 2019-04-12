@@ -14,18 +14,9 @@ public class Interacter {
         this.userInputReader = userInputReader;
     }
 
-    public Interacter(Library library) {
-        this.library = library;
-        this.printStream = System.out;
-        this.userInputReader = new UserInputReader();
-    }
-
-    public PrintStream getPrintStream() {
-        return this.printStream;
-    }
-
     public void printWelcomeMessages(boolean includeOptionMenu) {
         this.printStream.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+        this.printStream.println("TEST");
         if(includeOptionMenu) {
             printOptionMessage();
         }
@@ -88,4 +79,5 @@ public class Interacter {
         }
         printOptionMessage();
     }
+
 }
