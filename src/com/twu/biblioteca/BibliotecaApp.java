@@ -5,7 +5,8 @@ public class BibliotecaApp {
     public static void main(String[] args) {
 
         Library library = new Library();
-        Interacter interacter = new Interacter(library, System.out, System.in);
+        UserInputReader userInputReader = new UserInputReader();
+        Interacter interacter = new Interacter(library, System.out, userInputReader);
 
         interacter.printWelcomeMessages(true);
 

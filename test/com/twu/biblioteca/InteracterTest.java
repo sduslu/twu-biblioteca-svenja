@@ -2,7 +2,11 @@ package com.twu.biblioteca;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,6 +14,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class InteracterTest {
 
@@ -30,10 +35,25 @@ public class InteracterTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    @Mock
+    UserInputReader userInputReaderMock;
+
+    Interacter interacter;
+    PrintStream printStream;
+    Library library;
+
+
+
     @Before
-    public void setUpStreams() {
+    public void setUpStreamsAndInstantiateInteracter() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
+        library = new Library();
+        printStream = System.out;
+        interacter = new Interacter(library, printStream, userInputReaderMock);
     }
 
     @After
@@ -43,26 +63,8 @@ public class InteracterTest {
     }
 
     @Test
-    public void testConstructorInteracter() {
-        //Given
-        Library library = new Library();
-        PrintStream printStream = new PrintStream(new ByteArrayOutputStream());//System.out;
-        InputStream inputStream = System.in;
-
-        //When
-        Interacter interacter = new Interacter(library, printStream, inputStream);
-        //Then
-        assertEquals(printStream, interacter.getPrintStream());
-        assertEquals(inputStream, interacter.getInputStream());
-    }
-
-    @Test
     public void testSimpleWelcomeMessage() {
         //Given: As a user
-        Library library = new Library();
-        PrintStream printStream = System.out;
-        InputStream inputStream = System.in;
-        Interacter interacter = new Interacter(library, printStream, inputStream);
 
         //When: I start the application
         interacter.printWelcomeMessages(false);
@@ -75,10 +77,6 @@ public class InteracterTest {
     @Test
     public void testWelcomeMessageWithBookList() {
         //Given: As a user
-        Library library = new Library();
-        PrintStream printStream = System.out;
-        InputStream inputStream = System.in;
-        Interacter interacter = new Interacter(library, printStream, inputStream);
 
         //When: After the welcome message appears
         interacter.printWelcomeMessages(true);
@@ -90,49 +88,9 @@ public class InteracterTest {
     }
 
     @Test
-    public void testReadInputOptionFromUser() {
-        //Given
-        //When
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream("1".getBytes());
-        System.setIn(in);
-        //Then
-        assertEquals(1, Interacter.readInputOptionFromUser());
-        //Teardown
-        System.setIn(System.in);
-    }
-
-    @Test
-    public void testReadInvalidInputOptionFromUser() {
-        //Given: As a user
-        //When: I supply invalid input
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream("A".getBytes());
-        System.setIn(in);
-        //Then: The method readInputOtionFromUser() should return -1
-        assertEquals(-1, Interacter.readInputOptionFromUser());
-        //Teardown
-        System.setIn(System.in);
-    }
-
-    @Test
-    public void testReadNoInputOptionFromUser() {
-        //Given: As a user
-        //When: I supply no input at all
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream("".getBytes());
-        System.setIn(in);
-        //Then: The method readInputOtionFromUser() should return -1
-        assertEquals(-1, Interacter.readInputOptionFromUser());
-        //Teardown
-        System.setIn(System.in);
-    }
-
-    @Test
     public void testActOnChosenOption() {
         //Given:
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
+
         //When: I supply option 1
         int option = 1;
         //Then: method actOnChosenOption(option) should print a list of all library books
@@ -147,8 +105,7 @@ public class InteracterTest {
     @Test
     public void testActOnChosenOptionInvalid() {
         //Given: As a customer
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
+
         //When: I supply an invalid option
         int option = -5;
         //Then: I want to be notified when I entered an invalid choice.
@@ -162,8 +119,7 @@ public class InteracterTest {
     @Test
     public void testQuitApplication() {
         //Given: As a customer
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
+
         //When: I want to stop using the App
         int option = 0;
         //Then: I can choose the option to quit
@@ -176,9 +132,9 @@ public class InteracterTest {
 
     @Test
     public void testOptionCheckoutBook() {
-        //Given: As a user
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
+        //Given: As a user, when trying to checkout a book
+        when(userInputReaderMock.readInputBookFromUser()).thenReturn("");
+
         //When: I supply option 2
         int option = 2;
         interacter.actOnChosenOption(option);
@@ -192,103 +148,67 @@ public class InteracterTest {
 
     @Test
     public void testCheckoutSuccessMessage() {
-        //Given: As a user
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
-        String bookTitle = "Alice in Wonderland";
-        assert(library.containsAvailable(bookTitle));
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream(bookTitle.getBytes());
-        System.setIn(in);
+        //Given: As a user, when I want to check out an available book
+        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
 
         //When: Checking out a book successfully
         interacter.handleBookCheckout();
+
         //Then: I want to see a success message
         String expectedCheckoutMessage = "Thank you! Enjoy the book\n\n";
         assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
-        //Teardown
-        System.setIn(System.in);
     }
 
     @Test
     public void testCheckoutFailedMessage() {
-        //Given: As a user
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
-        String bookTitle = "Peter Pan";
-        assert( !library.containsAvailable(bookTitle) );
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream(bookTitle.getBytes());
-        System.setIn(in);
+        //Given: As a user, when I want to check out a non-available book
+        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Peter Pan");
 
         //When: Checking out a book unsuccessfully
         interacter.handleBookCheckout();
+
         //Then: I want to see a failing message
         String expectedCheckoutMessage = "Sorry, that book is not available\n\n";
         assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
-        //Teardown
-        System.setIn(System.in);
     }
 
     @Test
     public void testReturnSuccessMessage() {
-        //Given: As a user
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
-        String bookTitle = "Alice in Wonderland";
-        assert(library.containsAvailable(bookTitle));
+        //Given: As a user, when I return a book that belongs to the library
+        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
         library.getInventory().get(0).setAvailable(false);
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream(bookTitle.getBytes());
-        System.setIn(in);
 
         //When: Returning a book successfully
         interacter.handleBookReturn();
+
         //Then: I want to see a success message
         String expectedReturnMessage = "Thank you for returning the book\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
-        //Teardown
-        System.setIn(System.in);
     }
 
     @Test
     public void testReturnUnSuccessMessageForeignBook() {
         //Given: As a user
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
-        String bookTitle = "Three ???";
-        assert( !library.containsAvailable(bookTitle));
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream(bookTitle.getBytes());
-        System.setIn(in);
+        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Three ???");
 
         //When: Returning a book that does not belong to this library
         interacter.handleBookReturn();
         //Then: I want to see a failure message
         String expectedReturnMessage = "That is not a valid book to return.\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
-        //Teardown
-        System.setIn(System.in);
     }
 
     @Test
     public void testReturnUnSuccessMessageAvailableBook() {
         //Given: As a user
-        Library library = new Library();
-        Interacter interacter = new Interacter(library);
-        String bookTitle = "Alice in Wonderland";
-        assert( library.containsAvailable(bookTitle));
-        ByteArrayInputStream in;
-        in = new ByteArrayInputStream(bookTitle.getBytes());
-        System.setIn(in);
+        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
 
         //When: Returning a book that is not checked out (still available)
         interacter.handleBookReturn();
+
         //Then: I want to see a failure message
         String expectedReturnMessage = "That is not a valid book to return.\n\n";
         assertEquals( expectedReturnPrompt+expectedReturnMessage+expectedOptionMessage, outContent.toString());
-        //Teardown
-        System.setIn(System.in);
     }
 
 }
