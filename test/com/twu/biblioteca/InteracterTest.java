@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
@@ -42,11 +43,29 @@ public class InteracterTest {
     }
 
     @Test
+    public void testConstructorInteracter() {
+        //Given
+        Library library = new Library();
+        PrintStream printStream = new PrintStream(new ByteArrayOutputStream());//System.out;
+        InputStream inputStream = System.in;
+
+        //When
+        Interacter interacter = new Interacter(library, printStream, inputStream);
+        //Then
+        assertEquals(printStream, interacter.getPrintStream());
+        assertEquals(inputStream, interacter.getInputStream());
+    }
+
+    @Test
     public void testSimpleWelcomeMessage() {
         //Given: As a user
+        Library library = new Library();
+        PrintStream printStream = System.out;
+        InputStream inputStream = System.in;
+        Interacter interacter = new Interacter(library, printStream, inputStream);
 
         //When: I start the application
-        Interacter.printWelcomeMessages(false);
+        interacter.printWelcomeMessages(false);
 
         //Then: I want to see a welcome message
         assertEquals( expectedWelcomeMessage,
@@ -56,9 +75,13 @@ public class InteracterTest {
     @Test
     public void testWelcomeMessageWithBookList() {
         //Given: As a user
+        Library library = new Library();
+        PrintStream printStream = System.out;
+        InputStream inputStream = System.in;
+        Interacter interacter = new Interacter(library, printStream, inputStream);
 
         //When: After the welcome message appears
-        Interacter.printWelcomeMessages(true);
+        interacter.printWelcomeMessages(true);
 
         //Then: I want to see a menu of options before the list of all library books
 

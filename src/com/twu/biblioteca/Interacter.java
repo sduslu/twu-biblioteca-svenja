@@ -1,26 +1,42 @@
 package com.twu.biblioteca;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Interacter {
 
     private Library library;
+    private PrintStream printStream;
+    private InputStream inputStream;
+
+    public Interacter(Library library, PrintStream printStream, InputStream inputStream) {
+        this.library = library;
+        this.printStream = printStream;
+        this.inputStream = inputStream;
+    }
 
     public Interacter(Library library) {
         this.library = library;
+        this.printStream = System.out;
+        this.inputStream = System.in;
     }
 
-    public static void printWelcomeMessages(boolean includeOptionMenu) {
-        System.out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+    public PrintStream getPrintStream() {
+        return this.printStream;
+    }
+
+    public InputStream getInputStream() {
+        return this.inputStream;
+    }
+
+    public void printWelcomeMessages(boolean includeOptionMenu) {
+        this.printStream.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
         if(includeOptionMenu) {
             printOptionMessage();
         }
     }
 
-    private static void printOptionMessage() {
-        System.out.println("\nPlease choose one of the following options:" +
+    private void printOptionMessage() {
+        this.printStream.println("\nPlease choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
                 "\n1 : for displaying a List of Books" +
                 "\n2 : for checking out a book" +
@@ -51,11 +67,11 @@ public class Interacter {
 
     public boolean actOnChosenOption(int option) {
         if( option == 0 ) {
-            System.out.println("Exiting Biblioteca. See you soon!");
+            this.printStream.println("Exiting Biblioteca. See you soon!");
             return false;
         } else if( option == 1 ) {
-            System.out.println("\nList of all library books (Title, Author, Year):\n");
-            System.out.println(this.library.getListOfBooks());
+            this.printStream.println("\nList of all library books (Title, Author, Year):\n");
+            this.printStream.println(this.library.getListOfBooks());
             printOptionMessage();
         } else if( option == 2 ) {
             this.handleBookCheckout();
@@ -63,7 +79,7 @@ public class Interacter {
             this.handleBookReturn();
         }
         else if( option < 0 ) {
-            System.out.println("Please select a valid option!");
+            this.printStream.println("Please select a valid option!");
         }
         return true;
     }
@@ -89,27 +105,27 @@ public class Interacter {
     }
 
     public void handleBookCheckout() {
-        System.out.println("Please specify which book you want to checkout (Title)");
+        this.printStream.println("Please specify which book you want to checkout (Title)");
         String bookTitle = readInputBookFromUser();
         if( this.library.containsAvailable(bookTitle)) {
             this.library.checkout(bookTitle);
-            System.out.println("Thank you! Enjoy the book");
+            this.printStream.println("Thank you! Enjoy the book");
         }
         else {
-            System.out.println("Sorry, that book is not available");
+            this.printStream.println("Sorry, that book is not available");
         }
         printOptionMessage();
     }
 
     public void handleBookReturn() {
-        System.out.println("Please specify which book you want to return (Title)");
+        this.printStream.println("Please specify which book you want to return (Title)");
         String bookTitle = readInputBookFromUser();
         if( this.library.containsCheckedoutBook(bookTitle)) {
             this.library.returnBook(bookTitle);
-            System.out.println("Thank you for returning the book");
+            this.printStream.println("Thank you for returning the book");
         }
         else {
-            System.out.println("That is not a valid book to return.");
+            this.printStream.println("That is not a valid book to return.");
         }
         printOptionMessage();
     }
