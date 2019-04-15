@@ -1,0 +1,59 @@
+1. Who checked out the book 'The Hobbit'?
+A: Anand Beck
+Query:
+SELECT name
+FROM member, book, checkout_item WHERE
+member.id = checkout_item.member_id
+AND checkout_item.book_id = book.id
+AND book.title = 'The Hobbit';
+
+2. How many people have not checked out anything?
+A: 37
+Query:
+SELECT COUNT(name)
+FROM member
+WHERE member.id NOT IN (
+ SELECT member.id
+ FROM checkout_item, member
+ WHERE checkout_item.member_id = member.id
+);
+
+3. What books and movies aren't checked out?
+A:Fellowship of the Ring
+1984
+Tom Sawyer
+Catcher in the Rye
+To Kill a Mockingbird
+Domain Driven Design
+Thin Red Line
+Crouching Tiger, Hidden Dragon
+Lawrence of Arabia
+Office Space
+
+Query:
+SELECT book.title FROM book
+WHERE book.title NOT IN (
+SELECT title FROM book, checkout_item
+WHERE book.id = checkout_item.book_id
+);
+SELECT movie.title FROM movie
+WHERE movie.title NOT IN (
+SELECT title FROM movie, checkout_item
+WHERE movie.id = checkout_item.movie_id
+);
+
+4. Add the book 'The pragmatic programmer', and add yourself as a member. Check out the said book. Use your query from question 1 to verify that you have checked it out. Also, provide the SQL used to update the database.
+A:
+Query:
+INSERT INTO book (id, title) VALUES (11, "The Pragmatic Programmer");
+INSERT INTO member (id, name) VALUES (43, "Svenja Uslu");
+INSERT INTO checkout_item (member_id, book_id) VALUES (43, 11);
+
+5. Who has checked out more than 1 item? Tip: Research the GROUP BY syntax.
+A: I have not found the answer. My current approach looks as follows:
+Query:
+SELECT COUNT(checkout_item.book_id), COUNT(checkout_item.movie_id), checkout_item.member_id, member.name FROM checkout_item, member
+WHERE member.id = checkout_item.member_id
+GROUP BY checkout_item.member_id
+;
+
