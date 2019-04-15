@@ -21,7 +21,8 @@ public class InteracterTest {
             "\n0 : for quitting Biblioteca" +
             "\n1 : for displaying a List of Books" +
             "\n2 : for checking out a book" +
-            "\n3 : for returning a book";
+            "\n3 : for returning a book" +
+            "\n4 : for displaying a List of Movies";
     private String expectedCheckoutPrompt = "Please specify which book you want to checkout (Title)";
     private String expectedReturnPrompt = "Please specify which book you want to return (Title)";
 
@@ -87,7 +88,7 @@ public class InteracterTest {
         String expectedListOfBooks = library.getListOfMediums(1);
 
         //When: I supply option 1
-        interacter.actOnChosenOption(Option.OPTION_LIST);
+        interacter.actOnChosenOption(Option.OPTION_LIST_BOOKS);
 
         //Then: method actOnChosenOption(option) should print a list of all library books
         verify(printStreamMock).println(expectedListTitle);
@@ -208,6 +209,21 @@ public class InteracterTest {
         String expectedReturnMessage = "That is not a valid book to return.";
         verify(printStreamMock).println(expectedReturnPrompt);
         verify(printStreamMock).println(expectedReturnMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
+    }
+
+    @Test
+    public void testListAllMovies() {
+        //Given:
+        String expectedListTitle = "\nList of all library movies (Title, Director, Rating, Year):\n";
+        String expectedListOfMovies = library.getListOfMediums(2);
+
+        //When: I supply option 1
+        interacter.actOnChosenOption(Option.OPTION_LIST_MOVIES);
+
+        //Then: method actOnChosenOption(option) should print a list of all library books
+        verify(printStreamMock).println(expectedListTitle);
+        verify(printStreamMock).println(expectedListOfMovies);
         verify(printStreamMock).println(expectedOptionMessage);
     }
 

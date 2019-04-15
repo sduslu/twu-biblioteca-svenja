@@ -35,7 +35,8 @@ public class Interacter {
                 "\n0 : for quitting Biblioteca" +
                 "\n1 : for displaying a List of Books" +
                 "\n2 : for checking out a book" +
-                "\n3 : for returning a book");
+                "\n3 : for returning a book" +
+                "\n4 : for displaying a List of Movies");
     }
 
     public boolean actOnChosenOption(Option option) {

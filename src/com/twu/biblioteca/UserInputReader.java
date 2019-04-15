@@ -14,11 +14,13 @@ public class UserInputReader {
             if (input.equals("0")) {
                 return Option.OPTION_QUIT;//0;
             } else if( input.equals("1") ) {
-                return Option.OPTION_LIST;//1;
+                return Option.OPTION_LIST_BOOKS;//1;
             } else if( input.equals("2")) {
                 return Option.OPTION_CHECKOUT;//2;
             } else if( input.equals("3")) {
                 return Option.OPTION_RETURN;//3;
+            } else if( input.equals("4")) {
+                return Option.OPTION_LIST_MOVIES;//3;
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Library {
@@ -48,6 +49,14 @@ public class Library {
         }
         return listOfMovies;
     }
+
+ /*   private ArrayList<Medium> getInventory(Medium medium) {
+        if(medium instanceof Book) {
+            return this.inventoryBooks;
+        } else if (medium instanceof Movie) {
+            return this.inventoryMovies;
+        }
+    }*/
 
     private ArrayList<Movie> getInventoryMovies() {
         return this.inventoryMovies;
