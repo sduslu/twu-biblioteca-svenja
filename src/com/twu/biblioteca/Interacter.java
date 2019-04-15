@@ -34,7 +34,7 @@ public class Interacter {
         this.printStream.println("\nPlease choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
                 "\n1 : for displaying a List of Books" +
-                "\n2 : for checking out a book" +
+                "\n2 : for checking out a medium" +
                 "\n3 : for returning a book" +
                 "\n4 : for displaying a List of Movies");
     }
@@ -49,21 +49,34 @@ public class Interacter {
     }
 
     public void handleBookCheckout() {
-        this.printStream.println("Please specify which book you want to checkout (Title)");
-        String bookTitle = userInputReader.readInputBookFromUser();
+        this.printStream.println("Please specify which medium you want to checkout (Title)");
+        String bookTitle = userInputReader.readInputMediumFromUser();
         if( this.library.containsAvailable(bookTitle)) {
             this.library.checkout(bookTitle);
-            this.printStream.println("Thank you! Enjoy the book");
+            this.printStream.println("Thank you! Enjoy the medium");
         }
         else {
-            this.printStream.println("Sorry, that book is not available");
+            this.printStream.println("Sorry, that medium is not available");
+        }
+        printOptionMessage();
+    }
+
+    public void handleMovieCheckout() {
+        this.printStream.println("Please specify which medium you want to checkout (Title)");
+        String mediumTitle = userInputReader.readInputMediumFromUser();
+        if( this.library.containsAvailable(mediumTitle)) {
+            this.library.checkout(mediumTitle);
+            this.printStream.println("Thank you! Enjoy the medium");
+        }
+        else {
+            this.printStream.println("Sorry, that medium is not available");
         }
         printOptionMessage();
     }
 
     public void handleBookReturn() {
-        this.printStream.println("Please specify which book you want to return (Title)");
-        String bookTitle = userInputReader.readInputBookFromUser();
+        this.printStream.println("Please specify which medium you want to return (Title)");
+        String bookTitle = userInputReader.readInputMediumFromUser();
         if( this.library.containsCheckedoutBook(bookTitle)) {
             this.library.returnBook(bookTitle);
             this.printStream.println("Thank you for returning the book");

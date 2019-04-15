@@ -1,7 +1,5 @@
 package com.twu.biblioteca;
 
-import java.io.PrintStream;
-
 public enum Option {
 
     OPTION_QUIT {

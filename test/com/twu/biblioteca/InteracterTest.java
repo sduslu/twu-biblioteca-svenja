@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -20,11 +21,11 @@ public class InteracterTest {
     private String expectedOptionMessage = "\nPlease choose one of the following options:" +
             "\n0 : for quitting Biblioteca" +
             "\n1 : for displaying a List of Books" +
-            "\n2 : for checking out a book" +
+            "\n2 : for checking out a medium" +
             "\n3 : for returning a book" +
             "\n4 : for displaying a List of Movies";
-    private String expectedCheckoutPrompt = "Please specify which book you want to checkout (Title)";
-    private String expectedReturnPrompt = "Please specify which book you want to return (Title)";
+    private String expectedCheckoutPrompt = "Please specify which medium you want to checkout (Title)";
+    private String expectedReturnPrompt = "Please specify which medium you want to return (Title)";
 
     //Streams for testing the command line outputs:
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -123,13 +124,13 @@ public class InteracterTest {
     @Test
     public void testOptionCheckoutBook() {
         //Given: As a user, when trying to checkout a book
-        when(userInputReaderMock.readInputBookFromUser()).thenReturn("");
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("");
 
         //When: I supply option 2
         interacter.actOnChosenOption(Option.OPTION_CHECKOUT);
 
         //Then: I want to be asked to specify which book to checkout
-        String expectedCheckoutMessage = "Sorry, that book is not available";
+        String expectedCheckoutMessage = "Sorry, that medium is not available";
 
         verify(printStreamMock).println(expectedCheckoutPrompt);
         verify(printStreamMock).println(expectedCheckoutMessage);
@@ -139,13 +140,13 @@ public class InteracterTest {
     @Test
     public void testCheckoutSuccessMessage() {
         //Given: As a user, when I want to check out an available book
-        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Alice in Wonderland");
 
         //When: Checking out a book successfully
         interacter.handleBookCheckout();
 
         //Then: I want to see a success message
-        String expectedCheckoutMessage = "Thank you! Enjoy the book";
+        String expectedCheckoutMessage = "Thank you! Enjoy the medium";
         verify(printStreamMock).println(expectedCheckoutPrompt);
         verify(printStreamMock).println(expectedCheckoutMessage);
         verify(printStreamMock).println(expectedOptionMessage);
@@ -154,13 +155,13 @@ public class InteracterTest {
     @Test
     public void testCheckoutFailedMessage() {
         //Given: As a user, when I want to check out a non-available book
-        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Peter Pan");
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Peter Pan");
 
         //When: Checking out a book unsuccessfully
         interacter.handleBookCheckout();
 
         //Then: I want to see a failing message
-        String expectedCheckoutMessage = "Sorry, that book is not available";
+        String expectedCheckoutMessage = "Sorry, that medium is not available";
 //        assertEquals( expectedCheckoutPrompt+expectedCheckoutMessage+expectedOptionMessage, outContent.toString());
         verify(printStreamMock).println(expectedCheckoutPrompt);
         verify(printStreamMock).println(expectedCheckoutMessage);
@@ -170,7 +171,7 @@ public class InteracterTest {
     @Test
     public void testReturnSuccessMessage() {
         //Given: As a user, when I return a book that belongs to the library
-        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Alice in Wonderland");
         library.getInventoryBooks().get(0).setAvailable(false);
 
         //When: Returning a book successfully
@@ -186,7 +187,7 @@ public class InteracterTest {
     @Test
     public void testReturnUnSuccessMessageForeignBook() {
         //Given: As a user
-        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Three ???");
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Three ???");
 
         //When: Returning a book that does not belong to this library
         interacter.handleBookReturn();
@@ -200,7 +201,7 @@ public class InteracterTest {
     @Test
     public void testReturnUnSuccessMessageAvailableBook() {
         //Given: As a user
-        when(userInputReaderMock.readInputBookFromUser()).thenReturn("Alice in Wonderland");
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Alice in Wonderland");
 
         //When: Returning a book that is not checked out (still available)
         interacter.handleBookReturn();
@@ -227,4 +228,19 @@ public class InteracterTest {
         verify(printStreamMock).println(expectedOptionMessage);
     }
 
+    @Test
+    public void testCheckoutSuccessMessageMovie() {
+        //Given: As a user, when I want to check out an available book
+        when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Star Wars");
+
+        //When: Checking out a book successfully
+        interacter.handleMovieCheckout();
+
+        //Then: I want to see a success message and I want to movie not to be available any more
+        String expectedCheckoutMessage = "Thank you! Enjoy the medium";
+        verify(printStreamMock).println(expectedCheckoutPrompt);
+        verify(printStreamMock).println(expectedCheckoutMessage);
+        verify(printStreamMock).println(expectedOptionMessage);
+        assertEquals(false, library.containsAvailable("Star Wars"));
+    }
 }

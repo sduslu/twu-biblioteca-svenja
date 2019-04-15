@@ -143,4 +143,38 @@ public class LibraryTest {
         //Then: I want t that book to appear in the List of available books again.
         assertEquals( true, library.containsAvailable(bookTitle));
     }
+
+    @Test
+    public void testLibraryContainsAvailableMovie() {
+        //Given: As a user
+        Library library = new Library();
+        String movieTitle = "Star Wars";
+        //When: A medium is in the library
+        boolean libraryContainsMedium = library.containsAvailable(movieTitle);
+        //Then: I want to know that it is there
+        assertEquals( true, libraryContainsMedium);
+    }
+
+    @Test
+    public void testLibraryDoesNotContainMovie() {
+        //Given: As a user
+        Library library = new Library();
+        String movieTitle = "Star Wars 2";
+        //When: A movie is in the library
+        boolean libraryContainsMedium = library.containsAvailable(movieTitle);
+        //Then: I want to know that it is not there
+        assertEquals( false, libraryContainsMedium);
+    }
+
+    @Test
+    public void testSuccessfulCheckoutMovie() {
+        //Given: As a user
+        Library library = new Library();
+        String movieTitle = "Star Wars";
+        assert(library.containsAvailable(movieTitle));
+        //When: I checkout an existing book
+        library.checkout(movieTitle);
+        //Then: I want this book to be no longer in the available book list
+        assertEquals( false, library.containsAvailable(movieTitle));
+    }
 }

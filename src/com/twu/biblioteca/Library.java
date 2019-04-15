@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Library {
@@ -72,6 +71,11 @@ public class Library {
                 return true;
             }
         }
+        for( Movie movie : this.getInventoryMovies() ) {
+            if( movie.getTitle().equals(title) && movie.isAvailable() ) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -89,6 +93,12 @@ public class Library {
         for( Book book : this.getInventoryBooks()) {
             if( title.equals(book.getTitle()) ) {
                 book.setAvailable(false);
+                return;
+            }
+        }
+        for( Movie movie : this.getInventoryMovies()) {
+            if( title.equals(movie.getTitle()) ) {
+                movie.setAvailable(false);
                 return;
             }
         }
