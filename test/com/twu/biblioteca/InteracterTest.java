@@ -87,8 +87,7 @@ public class InteracterTest {
         String expectedListOfBooks = library.getListOfMediums(1);
 
         //When: I supply option 1
-        int option = 1;
-        interacter.actOnChosenOption(option);
+        interacter.actOnChosenOption(Option.OPTION_LIST);
 
         //Then: method actOnChosenOption(option) should print a list of all library books
         verify(printStreamMock).println(expectedListTitle);
@@ -102,8 +101,7 @@ public class InteracterTest {
         String expectedInvalidMessage = "Please select a valid option!";
 
         //When: I supply an invalid option
-        int option = -5;
-        interacter.actOnChosenOption(option);
+        interacter.actOnChosenOption(Option.OPTION_INVALID);
 
         //Then: I want to be notified when I entered an invalid choice.
         verify(printStreamMock).println(expectedInvalidMessage);
@@ -114,9 +112,8 @@ public class InteracterTest {
         //Given: As a customer
 
         //When: I want to stop using the App
-        int option = 0;
         String expectedInvalidMessage = "Exiting Biblioteca. See you soon!";
-        interacter.actOnChosenOption(option);
+        interacter.actOnChosenOption(Option.OPTION_QUIT);
 
         //Then: I can choose the option to quit
         verify(printStreamMock).println(expectedInvalidMessage);
@@ -128,8 +125,7 @@ public class InteracterTest {
         when(userInputReaderMock.readInputBookFromUser()).thenReturn("");
 
         //When: I supply option 2
-        int option = 2;
-        interacter.actOnChosenOption(option);
+        interacter.actOnChosenOption(Option.OPTION_CHECKOUT);
 
         //Then: I want to be asked to specify which book to checkout
         String expectedCheckoutMessage = "Sorry, that book is not available";

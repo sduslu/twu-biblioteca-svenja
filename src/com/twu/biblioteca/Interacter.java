@@ -14,6 +14,14 @@ public class Interacter {
         this.userInputReader = userInputReader;
     }
 
+    public PrintStream getPrintStream() {
+        return printStream;
+    }
+
+    public Library getLibrary() {
+        return library;
+    }
+
     public void printWelcomeMessages(boolean includeOptionMenu) {
         this.printStream.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
         this.printStream.println("TEST");
@@ -22,7 +30,7 @@ public class Interacter {
         }
     }
 
-    private void printOptionMessage() {
+    public void printOptionMessage() {
         this.printStream.println("\nPlease choose one of the following options:" +
                 "\n0 : for quitting Biblioteca" +
                 "\n1 : for displaying a List of Books" +
@@ -30,27 +38,12 @@ public class Interacter {
                 "\n3 : for returning a book");
     }
 
-    public boolean actOnChosenOption(int option) {
-        if( option == 0 ) {
-            this.printStream.println("Exiting Biblioteca. See you soon!");
-            return false;
-        } else if( option == 1 ) {
-            this.printStream.println("\nList of all library books (Title, Author, Year):\n");
-            this.printStream.println(this.library.getListOfMediums(1));
-            printOptionMessage();
-        } else if( option == 2 ) {
-            this.handleBookCheckout();
-        } else if( option == 3 ) {
-            this.handleBookReturn();
-        }
-        else if( option < 0 ) {
-            this.printStream.println("Please select a valid option!");
-        }
-        return true;
+    public boolean actOnChosenOption(Option option) {
+        return option.execute(this);
     }
 
     public boolean processMenu() {
-        int option = userInputReader.readInputOptionFromUser();
+        Option option = userInputReader.readInputOptionFromUser();
         return actOnChosenOption(option);
     }
 

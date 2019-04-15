@@ -6,28 +6,28 @@ import java.io.InputStreamReader;
 
 public class UserInputReader {
 
-    public int readInputOptionFromUser() {
+    public Option readInputOptionFromUser() {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
         try {
             String input = reader.readLine();
             if (input.equals("0")) {
-                return 0;
+                return Option.OPTION_QUIT;//0;
             } else if( input.equals("1") ) {
-                return 1;
+                return Option.OPTION_LIST;//1;
             } else if( input.equals("2")) {
-                return 2;
+                return Option.OPTION_CHECKOUT;//2;
             } else if( input.equals("3")) {
-                return 3;
+                return Option.OPTION_RETURN;//3;
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return -1;
+            return Option.OPTION_INVALID;//-1;
         } catch (NullPointerException n) {
 //            n.printStackTrace();
-            return -1;
+            return Option.OPTION_INVALID;//-1;
         }
-        return -1;
+        return Option.OPTION_INVALID;//-1;
     }
 
     public String readInputBookFromUser() {

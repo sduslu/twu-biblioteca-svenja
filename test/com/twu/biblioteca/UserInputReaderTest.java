@@ -24,7 +24,7 @@ public class UserInputReaderTest {
         in = new ByteArrayInputStream("1".getBytes());
         System.setIn(in);
         //Then
-        assertEquals(1, userInputReader.readInputOptionFromUser());
+        assertEquals(Option.OPTION_LIST, userInputReader.readInputOptionFromUser());
         //Teardown
         System.setIn(System.in);
     }
@@ -37,7 +37,7 @@ public class UserInputReaderTest {
         in = new ByteArrayInputStream("A".getBytes());
         System.setIn(in);
         //Then: The method readInputOtionFromUser() should return -1
-        assertEquals(-1, userInputReader.readInputOptionFromUser());
+        assertEquals(Option.OPTION_INVALID, userInputReader.readInputOptionFromUser());
         //Teardown
         System.setIn(System.in);
     }
@@ -50,7 +50,7 @@ public class UserInputReaderTest {
         in = new ByteArrayInputStream("".getBytes());
         System.setIn(in);
         //Then: The method readInputOtionFromUser() should return -1
-        assertEquals(-1, userInputReader.readInputOptionFromUser());
+        assertEquals(Option.OPTION_INVALID, userInputReader.readInputOptionFromUser());
         //Teardown
         System.setIn(System.in);
     }
