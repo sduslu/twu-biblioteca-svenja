@@ -11,17 +11,7 @@ public class UserInputReader {
                 new BufferedReader(new InputStreamReader(System.in));
         try {
             String input = reader.readLine();
-            if (input.equals("0")) {
-                return Option.OPTION_QUIT;
-            } else if( input.equals("1") ) {
-                return Option.OPTION_LIST_BOOKS;
-            } else if( input.equals("2")) {
-                return Option.OPTION_CHECKOUT;
-            } else if( input.equals("3")) {
-                return Option.OPTION_RETURN;
-            } else if( input.equals("4")) {
-                return Option.OPTION_LIST_MOVIES;
-            }
+            return Option.fromUserInput(input);
         } catch (IOException e) {
             e.printStackTrace();
             return Option.OPTION_INVALID;
@@ -29,7 +19,6 @@ public class UserInputReader {
 //            n.printStackTrace();
             return Option.OPTION_INVALID;
         }
-        return Option.OPTION_INVALID;
     }
 
     public String readInputMediumFromUser() {

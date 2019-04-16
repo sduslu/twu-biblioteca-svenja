@@ -2,7 +2,8 @@ package com.twu.biblioteca;
 
 public enum Option {
 
-    OPTION_QUIT {
+
+    OPTION_QUIT("0") {
         @Override
         boolean execute(Interacter interacter){
             interacter.getPrintStream().println("Exiting Biblioteca. See you soon!");
@@ -10,7 +11,7 @@ public enum Option {
         }
     },
 
-    OPTION_LIST_BOOKS {
+    OPTION_LIST_BOOKS("1") {
         @Override
         boolean execute(Interacter interacter){
             interacter.getPrintStream().println("\nList of all library books (Title, Author, Year):\n");
@@ -20,7 +21,7 @@ public enum Option {
         }
     },
 
-    OPTION_LIST_MOVIES {
+    OPTION_LIST_MOVIES("4") {
         @Override
         boolean execute(Interacter interacter){
             interacter.getPrintStream().println("\nList of all library movies (Title, Director, Rating, Year):\n");
@@ -30,7 +31,7 @@ public enum Option {
         }
     },
 
-    OPTION_CHECKOUT {
+    OPTION_CHECKOUT("2") {
         @Override
         boolean execute(Interacter interacter){
             interacter.handleMediumCheckout();
@@ -38,7 +39,7 @@ public enum Option {
         }
     },
 
-    OPTION_RETURN {
+    OPTION_RETURN("3") {
         @Override
         boolean execute(Interacter interacter){
             interacter.handleMediumReturn();
@@ -46,7 +47,7 @@ public enum Option {
         }
     },
 
-    OPTION_INVALID {
+    OPTION_INVALID("-1") {
         @Override
         boolean execute(Interacter interacter){
             interacter.getPrintStream().println("Please select a valid option!");
@@ -54,5 +55,20 @@ public enum Option {
         }
     };
 
+    String inputNumber;
+
+    Option(String inputNumber) {
+        this.inputNumber = inputNumber;
+    }
+
+    static Option fromUserInput(String inputNumber) {
+        for( Option option : Option.values() ) {
+            if( inputNumber.equals(option.inputNumber))
+                return option;
+        }
+        return OPTION_INVALID;
+    }
+
     abstract boolean execute(Interacter interacter);
+
 }
