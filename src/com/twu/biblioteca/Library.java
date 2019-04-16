@@ -4,34 +4,30 @@ import java.util.ArrayList;
 
 public class Library {
 
-    private ArrayList<Book> inventoryBooks;
-    private ArrayList<Movie> inventoryMovies;
+    private ArrayList<Medium> inventory;
 
     public Library() {
-        ArrayList<Book> listOfBooks = new ArrayList<Book>();
-        listOfBooks.add(new Book("Alice in Wonderland", "Lewis Carrol" ,1865));
-        listOfBooks.add(new Book("Oliver Twist", "Charles Dickens" ,1839));
-        listOfBooks.add(new Book("The Lord of the Rings", "J. R. R. Tolkien", 1954));
-        this.inventoryBooks = listOfBooks;
+        ArrayList<Medium> listOfMediums = new ArrayList<Medium>();
+        listOfMediums.add(new Book("Alice in Wonderland", "Lewis Carrol" ,1865));
+        listOfMediums.add(new Book("Oliver Twist", "Charles Dickens" ,1839));
+        listOfMediums.add(new Book("The Lord of the Rings", "J. R. R. Tolkien", 1954));
 
-        ArrayList<Movie> listOfMovies = new ArrayList<Movie>();
-        listOfMovies.add(new Movie("101 Dalmatians", "Stephen Herek", 3, 1996));
-        listOfMovies.add(new Movie("The Jungle Book", "Wolfgang Reithermann", 9, 1967));
-        listOfMovies.add(new Movie("Star Wars", "George Lucas", 8, 1977));
-        this.inventoryMovies = listOfMovies;
+        listOfMediums.add(new Movie("101 Dalmatians", "Stephen Herek", 3, 1996));
+        listOfMediums.add(new Movie("The Jungle Book", "Wolfgang Reithermann", 9, 1967));
+        listOfMediums.add(new Movie("Star Wars", "George Lucas", 8, 1977));
+        this.inventory = listOfMediums;
     }
 
-    public Library(ArrayList<Book> listOfBooks, ArrayList<Movie> listOfMovies ) {
-        this.inventoryBooks = listOfBooks;
-        this.inventoryMovies = listOfMovies;
+    public Library(ArrayList<Medium> listOfMediums ) {
+        this.inventory = listOfMediums;
     }
 
     public String getListOfBooks() {
 
         String listOfBooks = "";
-        for( Book book : this.getInventoryBooks() ) {
-            if( book.isAvailable()) {
-                listOfBooks += book.toString();
+        for( Medium medium : this.getInventory() ) {
+            if( medium instanceof Book && medium.isAvailable()) {
+                listOfBooks += medium.toString();
                 listOfBooks += "\n";
             }
         }
@@ -40,48 +36,31 @@ public class Library {
 
     public String getListOfMovies() {
         String listOfMovies = "";
-        for( Movie movie : this.getInventoryMovies() ) {
-            if( movie.isAvailable()) {
-                listOfMovies += movie.toString();
+        for( Medium medium : this.getInventory() ) {
+            if( medium instanceof Movie && medium.isAvailable()) {
+                listOfMovies += medium.toString();
                 listOfMovies += "\n";
             }
         }
         return listOfMovies;
     }
 
- /*   private ArrayList<Medium> getInventory(Medium medium) {
-        if(medium instanceof Book) {
-            return this.inventoryBooks;
-        } else if (medium instanceof Movie) {
-            return this.inventoryMovies;
-        }
-    }*/
-
-    private ArrayList<Movie> getInventoryMovies() {
-        return this.inventoryMovies;
-    }
-
-    public ArrayList<Book> getInventoryBooks() {
-        return this.inventoryBooks;
+    public ArrayList<Medium> getInventory() {
+        return this.inventory;
     }
 
     public boolean containsAvailable(String title) {
-        for( Book book : this.getInventoryBooks() ) {
-            if( book.getTitle().equals(title) && book.isAvailable() ) {
-                return true;
-            }
-        }
-        for( Movie movie : this.getInventoryMovies() ) {
-            if( movie.getTitle().equals(title) && movie.isAvailable() ) {
+        for( Medium medium : this.getInventory() ) {
+            if( medium.getTitle().equals(title) && medium.isAvailable() ) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean containsCheckedoutBook(String title) {
-        for( Book book : this.getInventoryBooks()) {
-            if( book.getTitle().equals(title) && !book.isAvailable() ) {
+    public boolean containsCheckedoutMedium(String title) {
+        for( Medium medium : this.getInventory() ) {
+            if( medium.getTitle().equals(title) && !medium.isAvailable() ) {
                 return true;
             }
         }
@@ -90,25 +69,19 @@ public class Library {
 
     public void checkout(String title) {
         assert(this.containsAvailable(title));
-        for( Book book : this.getInventoryBooks()) {
-            if( title.equals(book.getTitle()) ) {
-                book.setAvailable(false);
-                return;
-            }
-        }
-        for( Movie movie : this.getInventoryMovies()) {
-            if( title.equals(movie.getTitle()) ) {
-                movie.setAvailable(false);
+        for( Medium medium : this.getInventory()) {
+            if( title.equals(medium.getTitle()) ) {
+                medium.setAvailable(false);
                 return;
             }
         }
     }
 
-    public void returnBook(String title) {
-        assert(this.containsCheckedoutBook(title));
-        for( Book book : this.getInventoryBooks()) {
-            if( title.equals(book.getTitle()) && !book.isAvailable()) {
-                book.setAvailable(true);
+    public void returnMedium(String title) {
+        assert(this.containsCheckedoutMedium(title));
+        for( Medium medium : this.getInventory()) {
+            if( title.equals(medium.getTitle()) && !medium.isAvailable()) {
+                medium.setAvailable(true);
                 return;
             }
         }

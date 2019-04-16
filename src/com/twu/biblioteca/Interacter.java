@@ -35,7 +35,7 @@ public class Interacter {
                 "\n0 : for quitting Biblioteca" +
                 "\n1 : for displaying a List of Books" +
                 "\n2 : for checking out a medium" +
-                "\n3 : for returning a book" +
+                "\n3 : for returning a medium" +
                 "\n4 : for displaying a List of Movies");
     }
 
@@ -48,20 +48,7 @@ public class Interacter {
         return actOnChosenOption(option);
     }
 
-    public void handleBookCheckout() {
-        this.printStream.println("Please specify which medium you want to checkout (Title)");
-        String bookTitle = userInputReader.readInputMediumFromUser();
-        if( this.library.containsAvailable(bookTitle)) {
-            this.library.checkout(bookTitle);
-            this.printStream.println("Thank you! Enjoy the medium");
-        }
-        else {
-            this.printStream.println("Sorry, that medium is not available");
-        }
-        printOptionMessage();
-    }
-
-    public void handleMovieCheckout() {
+    public void handleMediumCheckout() {
         this.printStream.println("Please specify which medium you want to checkout (Title)");
         String mediumTitle = userInputReader.readInputMediumFromUser();
         if( this.library.containsAvailable(mediumTitle)) {
@@ -74,15 +61,15 @@ public class Interacter {
         printOptionMessage();
     }
 
-    public void handleBookReturn() {
+    public void handleMediumReturn() {
         this.printStream.println("Please specify which medium you want to return (Title)");
-        String bookTitle = userInputReader.readInputMediumFromUser();
-        if( this.library.containsCheckedoutBook(bookTitle)) {
-            this.library.returnBook(bookTitle);
-            this.printStream.println("Thank you for returning the book");
+        String mediumTitle = userInputReader.readInputMediumFromUser();
+        if( this.library.containsCheckedoutMedium(mediumTitle)) {
+            this.library.returnMedium(mediumTitle);
+            this.printStream.println("Thank you for returning the medium");
         }
         else {
-            this.printStream.println("That is not a valid book to return.");
+            this.printStream.println("That is not a valid medium to return.");
         }
         printOptionMessage();
     }

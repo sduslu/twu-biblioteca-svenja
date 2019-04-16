@@ -2,7 +2,6 @@ package com.twu.biblioteca;
 
 public class Book extends Medium{
 
-    private String title;
     private String author;
     private int year;
 
@@ -11,10 +10,6 @@ public class Book extends Medium{
         this.author = author;
         this.year = year;
         this.available = true;
-    }
-
-    public String getTitle() {
-        return this.title;
     }
 
     public String getAuthor() {

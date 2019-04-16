@@ -22,7 +22,7 @@ public class InteracterTest {
             "\n0 : for quitting Biblioteca" +
             "\n1 : for displaying a List of Books" +
             "\n2 : for checking out a medium" +
-            "\n3 : for returning a book" +
+            "\n3 : for returning a medium" +
             "\n4 : for displaying a List of Movies";
     private String expectedCheckoutPrompt = "Please specify which medium you want to checkout (Title)";
     private String expectedReturnPrompt = "Please specify which medium you want to return (Title)";
@@ -143,7 +143,7 @@ public class InteracterTest {
         when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Alice in Wonderland");
 
         //When: Checking out a book successfully
-        interacter.handleBookCheckout();
+        interacter.handleMediumCheckout();
 
         //Then: I want to see a success message
         String expectedCheckoutMessage = "Thank you! Enjoy the medium";
@@ -158,7 +158,7 @@ public class InteracterTest {
         when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Peter Pan");
 
         //When: Checking out a book unsuccessfully
-        interacter.handleBookCheckout();
+        interacter.handleMediumCheckout();
 
         //Then: I want to see a failing message
         String expectedCheckoutMessage = "Sorry, that medium is not available";
@@ -172,13 +172,13 @@ public class InteracterTest {
     public void testReturnSuccessMessage() {
         //Given: As a user, when I return a book that belongs to the library
         when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Alice in Wonderland");
-        library.getInventoryBooks().get(0).setAvailable(false);
+        library.getInventory().get(0).setAvailable(false);
 
         //When: Returning a book successfully
-        interacter.handleBookReturn();
+        interacter.handleMediumReturn();
 
         //Then: I want to see a success message
-        String expectedReturnMessage = "Thank you for returning the book";
+        String expectedReturnMessage = "Thank you for returning the medium";
         verify(printStreamMock).println(expectedReturnPrompt);
         verify(printStreamMock).println(expectedReturnMessage);
         verify(printStreamMock).println(expectedOptionMessage);
@@ -190,9 +190,9 @@ public class InteracterTest {
         when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Three ???");
 
         //When: Returning a book that does not belong to this library
-        interacter.handleBookReturn();
+        interacter.handleMediumReturn();
         //Then: I want to see a failure message
-        String expectedReturnMessage = "That is not a valid book to return.";
+        String expectedReturnMessage = "That is not a valid medium to return.";
         verify(printStreamMock).println(expectedReturnPrompt);
         verify(printStreamMock).println(expectedReturnMessage);
         verify(printStreamMock).println(expectedOptionMessage);
@@ -204,10 +204,10 @@ public class InteracterTest {
         when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Alice in Wonderland");
 
         //When: Returning a book that is not checked out (still available)
-        interacter.handleBookReturn();
+        interacter.handleMediumReturn();
 
         //Then: I want to see a failure message
-        String expectedReturnMessage = "That is not a valid book to return.";
+        String expectedReturnMessage = "That is not a valid medium to return.";
         verify(printStreamMock).println(expectedReturnPrompt);
         verify(printStreamMock).println(expectedReturnMessage);
         verify(printStreamMock).println(expectedOptionMessage);
@@ -234,7 +234,7 @@ public class InteracterTest {
         when(userInputReaderMock.readInputMediumFromUser()).thenReturn("Star Wars");
 
         //When: Checking out a book successfully
-        interacter.handleMovieCheckout();
+        interacter.handleMediumCheckout();
 
         //Then: I want to see a success message and I want to movie not to be available any more
         String expectedCheckoutMessage = "Thank you! Enjoy the medium";

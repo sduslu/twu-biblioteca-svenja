@@ -33,7 +33,7 @@ public enum Option {
     OPTION_CHECKOUT {
         @Override
         boolean execute(Interacter interacter){
-            interacter.handleBookCheckout();
+            interacter.handleMediumCheckout();
             return true;
         }
     },
@@ -41,7 +41,7 @@ public enum Option {
     OPTION_RETURN {
         @Override
         boolean execute(Interacter interacter){
-            interacter.handleBookReturn();
+            interacter.handleMediumReturn();
             return true;
         }
     },

@@ -1,7 +1,6 @@
 package com.twu.biblioteca;
 
 public class Movie extends Medium{
-    private String title;
     private String director;
     private int rating;
     private int year;
@@ -13,10 +12,6 @@ public class Movie extends Medium{
         this.rating = rating;
         this.year = year;
         this.available = true;
-    }
-
-    public String getTitle() {
-        return this.title;
     }
 
     public String getDirector() {
